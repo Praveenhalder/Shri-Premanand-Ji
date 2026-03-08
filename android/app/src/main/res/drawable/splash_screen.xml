@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Splash Screen drawable
+    Place this file in:  res/drawable/splash_screen.xml
+    Set as windowBackground in your SplashTheme in styles.xml
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Dark saffron background -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="60%"
+                android:centerX="0.5"
+                android:centerY="0.45"
+                android:startColor="#2D1000"
+                android:endColor="#0D0500"/>
+        </shape>
+    </item>
+
+    <!-- Centered launcher icon as splash logo -->
+    <item
+        android:width="200dp"
+        android:height="200dp"
+        android:gravity="center"
+        android:drawable="@mipmap/ic_launcher"/>
+
+</layer-list>

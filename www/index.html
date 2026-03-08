@@ -1,0 +1,3171 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Premanand Ji Maharaj</title>
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Tiro+Devanagari+Hindi:ital@0;1&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #D4A855;
+    --deep-gold: #B8860B;
+    --saffron: #FF6B00;
+    --saffron-light: #FFB347;
+    --cream: #FFF8E7;
+    --deep-brown: #1A0A00;
+    --maroon: #4A0E0E;
+    --lotus-pink: #E8A0BF;
+    --sacred-blue: #1a237e;
+    --bg-dark: #0D0500;
+    --text-light: #FFF3D0;
+    --shadow-gold: rgba(212,168,85,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: var(--bg-dark);
+    font-family: 'Tiro Devanagari Hindi', serif;
+    color: var(--text-light);
+    touch-action: manipulation;
+  }
+
+  /* ========== PARTICLE CANVAS ========== */
+  #particle-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ========== SPLASH SCREEN ========== */
+  #splash {
+    position: fixed; inset: 0; z-index: 1000;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at center, #1a0800 0%, #0D0500 70%, #000 100%);
+    overflow: hidden;
+    transition: opacity 1.2s ease, transform 1.2s ease;
+  }
+
+  #splash.fade-out {
+    opacity: 0; transform: scale(1.05);
+    pointer-events: none;
+  }
+
+  .splash-mandala {
+    position: absolute;
+    width: 110vw; height: 110vw;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    opacity: 0.07;
+    animation: rotateMandala 60s linear infinite;
+  }
+
+  @keyframes rotateMandala {
+    from { transform: translate(-50%,-50%) rotate(0deg); }
+    to { transform: translate(-50%,-50%) rotate(360deg); }
+  }
+
+  .splash-glow {
+    position: absolute;
+    width: 80vw; height: 80vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,168,85,0.3) 0%, rgba(255,107,0,0.1) 40%, transparent 70%);
+    animation: pulseGlow 3s ease-in-out infinite;
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+  }
+
+  @keyframes pulseGlow {
+    0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 0.6; }
+    50% { transform: translate(-50%,-50%) scale(1.2); opacity: 1; }
+  }
+
+  .splash-image-wrap {
+    position: relative; z-index: 10;
+    width: 68vw; height: 68vw; max-width: 280px; max-height: 280px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--gold);
+    box-shadow: 0 0 40px var(--shadow-gold), 0 0 80px rgba(255,107,0,0.3), inset 0 0 30px rgba(0,0,0,0.5);
+    animation: splashImageAppear 2s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes splashImageAppear {
+    0% { opacity: 0; transform: scale(0.5); filter: blur(20px); }
+    60% { opacity: 1; transform: scale(1.05); filter: blur(0); }
+    100% { opacity: 1; transform: scale(1); filter: blur(0); }
+  }
+
+  .splash-image-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: top center;
+  }
+
+  .splash-img-placeholder {
+    width: 100%; height: 100%;
+    background: radial-gradient(ellipse, #3d1f00 0%, #1a0a00 100%);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 8px;
+  }
+
+  .splash-img-placeholder .om {
+    font-size: 64px; color: var(--gold);
+    text-shadow: 0 0 30px var(--gold);
+    animation: omPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes omPulse {
+    0%,100% { text-shadow: 0 0 20px var(--gold); transform: scale(1); }
+    50% { text-shadow: 0 0 60px var(--gold), 0 0 100px rgba(255,179,71,0.5); transform: scale(1.1); }
+  }
+
+  .splash-title {
+    font-family: 'Yatra One', cursive;
+    font-size: 7.5vw; color: var(--gold);
+    text-align: center; margin-top: 24px;
+    text-shadow: 0 0 20px var(--shadow-gold);
+    letter-spacing: 2px;
+    animation: titleReveal 2.5s ease forwards;
+    opacity: 0;
+    position: relative; z-index: 10;
+  }
+
+  @keyframes titleReveal {
+    0% { opacity: 0; transform: translateY(20px); }
+    40% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .splash-subtitle {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 4vw; color: var(--saffron-light);
+    text-align: center; margin-top: 6px;
+    letter-spacing: 3px;
+    animation: titleReveal 3s ease forwards;
+    opacity: 0;
+    position: relative; z-index: 10;
+  }
+
+  .splash-loading {
+    margin-top: 30px; position: relative; z-index: 10;
+    display: flex; gap: 8px;
+    animation: titleReveal 3.5s ease forwards;
+    opacity: 0;
+  }
+
+  .splash-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--gold);
+    animation: dotBounce 1.4s ease-in-out infinite;
+  }
+  .splash-dot:nth-child(2) { animation-delay: 0.2s; }
+  .splash-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes dotBounce {
+    0%,80%,100% { transform: scale(0.8); opacity: 0.5; }
+    40% { transform: scale(1.2); opacity: 1; }
+  }
+
+  /* ========== MAIN APP ========== */
+  #app {
+    position: fixed; inset: 0; z-index: 1;
+    display: flex; flex-direction: column;
+    background: linear-gradient(180deg, #0D0500 0%, #1a0800 50%, #0D0500 100%);
+    opacity: 0; transition: opacity 1s ease 0.3s;
+  }
+
+  #app.visible { opacity: 1; }
+
+  /* ========== TOP BAR ========== */
+  .top-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 18px 8px;
+    background: linear-gradient(180deg, rgba(26,8,0,0.95) 0%, rgba(13,5,0,0.8) 100%);
+    border-bottom: 1px solid rgba(212,168,85,0.3);
+    flex-shrink: 0; position: relative; z-index: 50;
+  }
+
+  .app-logo {
+    font-family: 'Yatra One', cursive;
+    font-size: 5vw; color: var(--gold);
+    text-shadow: 0 0 10px var(--shadow-gold);
+    line-height: 1.2;
+  }
+
+  .app-logo span {
+    display: block;
+    font-size: 3vw; color: var(--saffron-light);
+    font-family: 'Tiro Devanagari Hindi', serif;
+  }
+
+  .lang-toggle {
+    display: flex; border-radius: 20px; overflow: hidden;
+    border: 1px solid rgba(212,168,85,0.5);
+  }
+
+  .lang-btn {
+    padding: 5px 12px;
+    background: transparent; border: none; cursor: pointer;
+    font-size: 3.2vw; color: var(--gold);
+    font-family: 'EB Garamond', serif;
+    transition: all 0.3s;
+  }
+
+  .lang-btn.active {
+    background: var(--gold); color: var(--deep-brown);
+    font-weight: 700;
+  }
+
+  /* ========== SCROLL AREA ========== */
+  .scroll-area {
+    flex: 1; overflow-y: auto; overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 0 80px;
+    scroll-behavior: smooth;
+  }
+
+  .scroll-area::-webkit-scrollbar { display: none; }
+
+  /* ========== HERO ========== */
+  .hero {
+    position: relative; text-align: center;
+    padding: 20px 20px 24px;
+    background: linear-gradient(180deg, #1a0800 0%, transparent 100%);
+  }
+
+  .hero-image-ring {
+    position: relative; display: inline-block;
+    margin-bottom: 14px;
+  }
+
+  .ring-outer {
+    width: 52vw; height: 52vw; max-width: 220px; max-height: 220px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background: conic-gradient(from 0deg, var(--gold), var(--saffron), var(--gold), var(--deep-gold), var(--gold)) border-box;
+    padding: 4px;
+    position: relative;
+    animation: ringRotate 20s linear infinite;
+  }
+
+  @keyframes ringRotate {
+    from { filter: hue-rotate(0deg); }
+    to { filter: hue-rotate(30deg); }
+  }
+
+  .ring-inner {
+    width: 100%; height: 100%; border-radius: 50%; overflow: hidden;
+    border: 2px solid var(--gold);
+    box-shadow: 0 0 30px var(--shadow-gold), inset 0 0 20px rgba(0,0,0,0.4);
+  }
+
+  .ring-inner img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: top center;
+  }
+
+  .hero-img-placeholder {
+    width: 100%; height: 100%; border-radius: 50%;
+    background: radial-gradient(ellipse, #3d1f00 0%, #1a0a00 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 52px; color: var(--gold);
+  }
+
+  .hero-name {
+    font-family: 'Yatra One', cursive;
+    font-size: 7vw; color: var(--gold);
+    text-shadow: 0 0 15px var(--shadow-gold);
+    letter-spacing: 1px;
+  }
+
+  .hero-tagline {
+    font-size: 3.5vw; color: var(--saffron-light);
+    margin-top: 4px; letter-spacing: 2px;
+    font-style: italic;
+  }
+
+  .divider-om {
+    text-align: center; margin: 16px 0;
+    font-size: 20px; color: var(--gold);
+    position: relative;
+  }
+
+  .divider-om::before, .divider-om::after {
+    content: '';
+    position: absolute; top: 50%;
+    width: 30%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+
+  .divider-om::before { left: 8%; }
+  .divider-om::after { right: 8%; transform: scaleX(-1); }
+
+  /* ========== SECTION HEADER ========== */
+  .section-header {
+    padding: 18px 20px 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .section-icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: radial-gradient(circle, var(--saffron) 0%, var(--deep-gold) 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+    box-shadow: 0 0 15px rgba(255,107,0,0.5);
+  }
+
+  .section-title {
+    font-family: 'Yatra One', cursive;
+    font-size: 5vw; color: var(--gold);
+    text-shadow: 0 0 8px var(--shadow-gold);
+  }
+
+  /* ========== PRAVACHAN CARDS ========== */
+  .pravachan-list {
+    padding: 0 16px; display: flex; flex-direction: column; gap: 12px;
+  }
+
+  .pravachan-card {
+    background: linear-gradient(135deg, rgba(212,168,85,0.08) 0%, rgba(26,8,0,0.9) 100%);
+    border: 1px solid rgba(212,168,85,0.25);
+    border-radius: 16px;
+    padding: 14px 16px;
+    position: relative; overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .pravachan-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: linear-gradient(180deg, var(--saffron), var(--gold));
+    border-radius: 3px 0 0 3px;
+  }
+
+  .pravachan-card.active {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(212,168,85,0.15) 0%, rgba(26,8,0,0.9) 100%);
+    box-shadow: 0 0 20px rgba(212,168,85,0.2);
+  }
+
+  .pravachan-card:active { transform: scale(0.98); }
+
+  .pc-header {
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .pc-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,168,85,0.2), rgba(255,107,0,0.1));
+    border: 1px solid rgba(212,168,85,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+    transition: all 0.3s;
+  }
+
+  .pravachan-card.active .pc-icon {
+    background: radial-gradient(circle, var(--saffron), var(--deep-gold));
+    animation: iconPulse 1.5s ease-in-out infinite;
+    box-shadow: 0 0 15px rgba(255,107,0,0.6);
+  }
+
+  @keyframes iconPulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  .pc-info { flex: 1; min-width: 0; }
+  .pc-title {
+    font-family: 'Yatra One', cursive;
+    font-size: 4vw; color: var(--gold);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .pc-subtitle {
+    font-size: 3.2vw; color: rgba(255,243,208,0.6);
+    margin-top: 2px;
+  }
+  .pc-duration {
+    font-size: 3vw; color: var(--saffron-light);
+    font-family: 'EB Garamond', serif;
+  }
+
+  /* ── Remote pravachan download bar ── */
+  .remote-bar {
+    margin: 0 16px 10px;
+    background: linear-gradient(135deg, rgba(255,107,0,0.08), rgba(26,8,0,0.9));
+    border: 1px solid rgba(255,107,0,0.3);
+    border-radius: 14px; padding: 11px 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .remote-bar-text { flex:1; font-family:'Yatra One',cursive; font-size:3.5vw; color:var(--saffron-light); }
+  .remote-bar-sub  { font-size:2.8vw; color:rgba(255,243,208,0.5); font-family:'EB Garamond',serif; margin-top:2px; }
+  .btn-fetch {
+    background: rgba(212,168,85,0.1);
+    border: 1px solid rgba(212,168,85,0.45);
+    border-radius: 20px; padding: 7px 16px;
+    color: var(--gold); font-family:'Yatra One',cursive; font-size:3.2vw;
+    cursor: pointer; white-space: nowrap; flex-shrink:0;
+    transition: all 0.3s;
+  }
+  .btn-fetch:hover { background: rgba(212,168,85,0.18); border-color: var(--gold); }
+  .btn-fetch:disabled { opacity:0.4; cursor:default; }
+
+  .pravachan-card.remote {
+    border-color: rgba(255,107,0,0.35);
+    background: linear-gradient(135deg, rgba(255,107,0,0.07) 0%, rgba(26,8,0,0.9) 100%);
+  }
+  .dl-btn {
+    background: linear-gradient(135deg, rgba(255,107,0,0.2), rgba(212,168,85,0.1));
+    border: 1px solid rgba(255,107,0,0.5); border-radius: 14px;
+    padding: 5px 10px; color: var(--saffron-light);
+    font-size: 3.2vw; cursor: pointer; white-space: nowrap;
+    font-family:'EB Garamond',serif; flex-shrink:0;
+  }
+  .dl-btn:disabled { opacity:0.5; cursor:default; }
+
+  .fav-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 4vw; color: rgba(212,168,85,0.4);
+    line-height: 1; padding: 0 2px; flex-shrink: 0;
+    transition: color 0.2s, transform 0.15s;
+  }
+  .fav-btn:active { transform: scale(1.3); }
+  .fav-btn.fav-on { color: var(--gold); }
+
+  /* ========== AUDIO PLAYER ========== */
+  .audio-player {
+    margin: 0 16px 8px;
+    background: linear-gradient(135deg, rgba(212,168,85,0.1), rgba(26,8,0,0.95));
+    border: 1px solid rgba(212,168,85,0.4);
+    border-radius: 20px; padding: 16px 18px;
+    display: none;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(212,168,85,0.1);
+  }
+
+  .audio-player.visible { display: block; }
+
+  .player-title {
+    font-family: 'Yatra One', cursive;
+    font-size: 4.5vw; color: var(--gold);
+    text-align: center; margin-bottom: 12px;
+    text-shadow: 0 0 8px var(--shadow-gold);
+  }
+
+  .player-action-btn {
+    background: none; border: none;
+    border-radius: 50%; width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; color: rgba(212,168,85,0.5);
+    cursor: pointer; transition: all 0.2s; flex-shrink: 0;
+    line-height: 1; visibility: hidden;
+  }
+  .player-action-btn:active { transform: scale(0.85); }
+  .player-action-btn.active {
+    color: var(--gold);
+    border-color: rgba(212,168,85,0.7);
+    background: rgba(212,168,85,0.2);
+    box-shadow: 0 0 8px rgba(212,168,85,0.3);
+  }
+  .player-action-btn.cached {
+    color: var(--gold); border-color: rgba(212,168,85,0.6);
+  }
+
+  .progress-wrap {
+    position: relative; height: 4px;
+    background: rgba(212,168,85,0.2); border-radius: 2px;
+    margin-bottom: 6px; cursor: pointer;
+  }
+
+  .progress-bar {
+    height: 100%; border-radius: 2px;
+    background: linear-gradient(90deg, var(--saffron), var(--gold));
+    width: 0%; transition: width 0.5s linear;
+    position: relative;
+  }
+
+  .progress-bar::after {
+    content: '';
+    position: absolute; right: -5px; top: -4px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--gold); box-shadow: 0 0 8px var(--gold);
+  }
+
+  .time-row {
+    display: flex; justify-content: space-between;
+    font-size: 3vw; color: rgba(255,243,208,0.5);
+    font-family: 'EB Garamond', serif;
+    margin-bottom: 14px;
+  }
+
+  .player-controls {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+  }
+
+  .ctrl-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--gold); font-size: 24px;
+    transition: all 0.2s; display: flex; align-items: center;
+  }
+
+  .ctrl-btn:active { transform: scale(0.85); }
+
+  .play-btn {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: radial-gradient(circle, var(--saffron), var(--deep-gold));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 0 20px rgba(255,107,0,0.5);
+    transition: all 0.3s;
+  }
+
+  .play-btn:active { transform: scale(0.9); }
+
+  /* ========== WAVEFORM ========== */
+  .waveform {
+    display: flex; align-items: center; justify-content: center;
+    gap: 3px; height: 30px; margin: 10px 0;
+  }
+
+  .wave-bar {
+    width: 3px; border-radius: 2px;
+    background: var(--gold); opacity: 0.4;
+    height: 4px; transition: height 0.1s;
+  }
+
+  .playing .wave-bar {
+    animation: waveAnim 1s ease-in-out infinite;
+    opacity: 0.8;
+  }
+
+  @keyframes waveAnim {
+    0%,100% { height: 4px; }
+    50% { height: var(--h, 20px); }
+  }
+
+  /* ========== GITA SECTION ========== */
+  .gita-section { padding: 0 16px 16px; }
+
+  .gita-card {
+    background: linear-gradient(135deg, rgba(212,168,85,0.08), rgba(26,8,0,0.95));
+    border: 1px solid rgba(212,168,85,0.3);
+    border-radius: 20px; padding: 20px;
+    text-align: center; cursor: pointer;
+    transition: all 0.4s; position: relative; overflow: hidden;
+  }
+
+  .gita-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(212,168,85,0.1) 0%, transparent 70%);
+    opacity: 0; transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .gita-card:active::before { opacity: 1; }
+
+  .gita-icon { font-size: 40px; margin-bottom: 8px; }
+  .gita-title {
+    font-family: 'Yatra One', cursive;
+    font-size: 5.5vw; color: var(--gold);
+    text-shadow: 0 0 10px var(--shadow-gold);
+  }
+  .gita-sub { font-size: 3.5vw; color: var(--saffron-light); margin-top: 4px; }
+
+  /* ========== PDF READER OVERLAY ========== */
+  #pdf-overlay {
+    position: fixed; inset: 0; z-index: 500;
+    display: none; flex-direction: column;
+    background: #1a0e00;
+    transform: translateY(100%);
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .pdf-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px;
+    background: linear-gradient(180deg, rgba(26,8,0,1) 0%, rgba(26,14,0,0.9) 100%);
+    border-bottom: 1px solid rgba(212,168,85,0.3);
+    flex-shrink: 0;
+  }
+
+  .pdf-close {
+    background: rgba(212,168,85,0.15); border: 1px solid rgba(212,168,85,0.3);
+    border-radius: 50%; width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 18px; color: var(--gold);
+    transition: all 0.2s;
+  }
+
+  .pdf-title {
+    font-family: 'Yatra One', cursive;
+    font-size: 4.5vw; color: var(--gold);
+    text-shadow: 0 0 8px var(--shadow-gold);
+  }
+
+  .pdf-page-info {
+    font-size: 3.2vw; color: var(--saffron-light);
+    font-family: 'EB Garamond', serif;
+  }
+
+  /* ========== BOOK VIEWER ========== */
+  .book-container {
+    flex: 1; position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+    align-items: center;
+  }
+
+  .book-pages-scroll {
+    flex: 1; overflow-y: auto; overflow-x: hidden;
+    width: 100%; padding: 16px;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  .book-pages-scroll::-webkit-scrollbar { display: none; }
+
+  .book-page {
+    background: linear-gradient(160deg, #FFF8E7 0%, #FFF0D0 50%, #FFE8B0 100%);
+    border-radius: 4px 16px 16px 4px;
+    margin-bottom: 24px; position: relative;
+    box-shadow:
+      -4px 0 8px rgba(0,0,0,0.5),
+      4px 0 12px rgba(0,0,0,0.3),
+      0 8px 24px rgba(0,0,0,0.4),
+      inset -2px 0 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+    animation: pageAppear 0.4s ease;
+  }
+
+  @keyframes pageAppear {
+    from { opacity: 0; transform: rotateY(-10deg) translateX(-10px); }
+    to { opacity: 1; transform: rotateY(0) translateX(0); }
+  }
+
+  .book-page::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0; width: 16px;
+    background: linear-gradient(90deg, rgba(180,120,60,0.4), transparent);
+    pointer-events: none;
+  }
+
+  .book-page::after {
+    content: '';
+    position: absolute; right: 0; top: 0; bottom: 0; width: 8px;
+    background: linear-gradient(90deg, transparent, rgba(180,120,60,0.15));
+    pointer-events: none;
+  }
+
+  .page-inner {
+    padding: 20px 20px 20px 28px;
+  }
+
+  .page-number {
+    text-align: center;
+    font-family: 'EB Garamond', serif;
+    font-size: 10px; color: rgba(100,60,20,0.5);
+    margin-bottom: 10px; letter-spacing: 2px;
+  }
+
+  .page-text {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 4vw; line-height: 1.8;
+    color: #2a1500;
+    text-align: justify;
+  }
+
+  .page-text-en {
+    font-family: 'EB Garamond', serif;
+    font-size: 4vw; line-height: 1.9;
+    color: #2a1500;
+    text-align: justify;
+    font-style: italic;
+  }
+
+  .chapter-heading {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 4.5vw; color: var(--maroon);
+    text-align: center; margin-bottom: 14px;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+  }
+
+  .verse-number {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 3vw; color: var(--deep-gold);
+    text-align: center; margin: 10px 0 6px;
+  }
+
+  .book-spine {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 20px;
+    background: linear-gradient(90deg, #8B4513, #A0522D, #8B4513);
+    pointer-events: none; z-index: 10;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.5);
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; overflow: hidden;
+  }
+
+  .book-spine-text {
+    writing-mode: vertical-rl;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 8px; color: var(--gold);
+    letter-spacing: 3px; opacity: 0.8;
+  }
+
+  /* ========== PDF CONTROLS ========== */
+  .pdf-controls {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 20px;
+    background: rgba(26,8,0,0.95);
+    border-top: 1px solid rgba(212,168,85,0.2);
+    flex-shrink: 0;
+  }
+
+  .pdf-nav-btn {
+    background: rgba(212,168,85,0.15); border: 1px solid rgba(212,168,85,0.3);
+    border-radius: 10px; padding: 8px 20px;
+    color: var(--gold); cursor: pointer; font-size: 3.5vw;
+    font-family: 'Yatra One', cursive;
+    transition: all 0.2s;
+  }
+
+  .pdf-nav-btn:active { transform: scale(0.95); background: rgba(212,168,85,0.3); }
+  .pdf-nav-btn:disabled { opacity: 0.3; pointer-events: none; }
+
+  .pdf-progress {
+    flex: 1; margin: 0 12px;
+    height: 3px; background: rgba(212,168,85,0.2);
+    border-radius: 2px; cursor: pointer;
+  }
+
+  .pdf-progress-fill {
+    height: 100%; border-radius: 2px;
+    background: linear-gradient(90deg, var(--saffron), var(--gold));
+    transition: width 0.4s ease;
+  }
+
+  /* ========== NAV BAR ========== */
+  .bottom-nav {
+    display: flex;
+    background: linear-gradient(0deg, rgba(26,8,0,1) 0%, rgba(13,5,0,0.95) 100%);
+    border-top: 1px solid rgba(212,168,85,0.25);
+    flex-shrink: 0; position: relative; z-index: 50;
+  }
+
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 10px 4px 8px; cursor: pointer;
+    transition: all 0.3s; position: relative;
+    border: none; background: none;
+  }
+
+  .nav-item.active .nav-icon svg { stroke: var(--gold); filter: drop-shadow(0 0 4px rgba(212,168,85,0.6)); }
+  .nav-item.active .nav-icon svg .fill-icon { fill: var(--gold); stroke: none; }
+  .nav-item.active .nav-label { color: var(--gold); }
+
+  .nav-item.active::after {
+    content: '';
+    position: absolute; bottom: 0; left: 20%; right: 20%;
+    height: 2px; background: linear-gradient(90deg, var(--saffron), var(--gold));
+    border-radius: 2px;
+    animation: navGlow 2s ease-in-out infinite;
+  }
+
+  @keyframes navGlow {
+    0%,100% { box-shadow: 0 0 5px var(--gold); }
+    50% { box-shadow: 0 0 15px var(--gold); }
+  }
+
+  .nav-icon { font-size: 22px; transition: all 0.3s; display:flex; align-items:center; justify-content:center; }
+  .nav-icon svg { width: 24px; height: 24px; stroke: rgba(255,243,208,0.35); stroke-width: 1.6; fill: none; transition: all 0.3s; }
+  .nav-icon svg .fill-icon { fill: rgba(255,243,208,0.35); stroke: none; }
+  .nav-label {
+    font-size: 2.8vw; color: rgba(255,243,208,0.35);
+    margin-top: 3px; font-family: 'Tiro Devanagari Hindi', serif;
+    transition: all 0.3s;
+  }
+
+  /* ========== SECTIONS ========== */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  #pravachan-search:focus {
+    border-color: rgba(212,168,85,0.7);
+    background: rgba(212,168,85,0.12);
+    box-shadow: 0 0 8px rgba(212,168,85,0.2);
+  }
+  #pravachan-search::placeholder { color: rgba(255,243,208,0.3); }
+
+  /* ========== ABOUT SECTION ========== */
+  .about-card {
+    margin: 0 16px 16px;
+    background: linear-gradient(135deg, rgba(212,168,85,0.06), rgba(26,8,0,0.95));
+    border: 1px solid rgba(212,168,85,0.2);
+    border-radius: 20px; padding: 20px;
+  }
+
+  .about-text {
+    font-size: 4vw; line-height: 1.9;
+    color: rgba(255,243,208,0.85);
+    text-align: justify;
+  }
+
+  .quote-box {
+    margin: 16px 0;
+    padding: 14px 18px;
+    border-left: 3px solid var(--gold);
+    background: rgba(212,168,85,0.06);
+    border-radius: 0 12px 12px 0;
+  }
+
+  .quote-text {
+    font-family: 'Yatra One', cursive;
+    font-size: 4.5vw; color: var(--gold);
+    line-height: 1.7;
+    text-shadow: 0 0 8px var(--shadow-gold);
+  }
+
+
+  /* ========== LOADING PDF ========== */
+  .pdf-loading {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; flex: 1; gap: 16px;
+  }
+
+  .pdf-loading-om {
+    font-size: 48px; color: var(--gold);
+    animation: omPulse 2s ease-in-out infinite;
+  }
+
+  .pdf-loading-text {
+    font-family: 'Yatra One', cursive;
+    font-size: 4.5vw; color: var(--saffron-light);
+  }
+
+  /* ========== RESPONSIVE TWEAKS ========== */
+  @media (min-width: 480px) {
+    .app-logo { font-size: 22px; }
+    .app-logo span { font-size: 13px; }
+    .hero-name { font-size: 30px; }
+    .page-text, .page-text-en { font-size: 16px; }
+    .lang-btn { font-size: 14px; }
+    .nav-label { font-size: 11px; }
+    .pc-title { font-size: 15px; }
+    .section-title { font-size: 20px; }
+  }
+
+  /* Shimmer animation for cards */
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  .gold-shimmer {
+    background: linear-gradient(90deg, var(--gold) 25%, #ffe88a 50%, var(--gold) 75%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-glow"></div>
+  <svg class="splash-mandala" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="200" cy="200" r="190" stroke="#D4A855" stroke-width="0.5"/>
+    <circle cx="200" cy="200" r="160" stroke="#D4A855" stroke-width="0.5"/>
+    <circle cx="200" cy="200" r="130" stroke="#D4A855" stroke-width="0.5"/>
+    <circle cx="200" cy="200" r="100" stroke="#D4A855" stroke-width="0.5"/>
+    <g stroke="#D4A855" stroke-width="0.5">
+      <line x1="200" y1="10" x2="200" y2="390"/>
+      <line x1="10" y1="200" x2="390" y2="200"/>
+      <line x1="59" y1="59" x2="341" y2="341"/>
+      <line x1="341" y1="59" x2="59" y2="341"/>
+      <line x1="28" y1="130" x2="372" y2="270"/>
+      <line x1="28" y1="270" x2="372" y2="130"/>
+      <line x1="130" y1="28" x2="270" y2="372"/>
+      <line x1="270" y1="28" x2="130" y2="372"/>
+    </g>
+    <g fill="#D4A855">
+      <polygon points="200,100 210,130 240,130 218,148 226,178 200,162 174,178 182,148 160,130 190,130" opacity="0.6"/>
+    </g>
+    <text x="200" y="212" text-anchor="middle" font-size="40" fill="#D4A855" opacity="0.8" font-family="serif">ॐ</text>
+  </svg>
+
+  <div class="splash-image-wrap">
+    <!-- 👇 Place your image at: images/premanand_ji.jpg (or .png) next to index.html -->
+    <img src="images/premanand_ji.jpg"
+         alt="Premanand Ji Maharaj"
+         onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Premanand_Maharaj.jpg/800px-Premanand_Maharaj.jpg'; this.onerror=function(){this.style.display='none'; this.nextElementSibling.style.display='flex';}">
+    <div class="splash-img-placeholder" style="display:none">
+      <div class="om">ॐ</div>
+    </div>
+  </div>
+
+  <div class="splash-title">श्री प्रेमानंद जी महाराज</div>
+  <div class="splash-subtitle">Shri Premanand Ji Maharaj</div>
+  <div class="splash-loading">
+    <div class="splash-dot"></div>
+    <div class="splash-dot"></div>
+    <div class="splash-dot"></div>
+  </div>
+
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="app-logo">
+      <span id="app-tagline-top">श्री प्रेमानंद जी</span>
+      Premanand Ji
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('hi')" id="btn-hi">हिंदी</button>
+      <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+    </div>
+  </div>
+
+  <!-- SCROLL AREA -->
+  <div class="scroll-area" id="main-scroll">
+
+    <!-- HOME SECTION -->
+    <div class="section active" id="sec-home">
+
+      <div class="hero">
+        <div class="hero-image-ring">
+          <div class="ring-outer">
+            <div class="ring-inner">
+              <!-- 👇 Same image used in splash: images/premanand_ji.jpg -->
+              <img src="images/premanand_ji.jpg"
+                   alt="Premanand Ji Maharaj"
+                   onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Premanand_Maharaj.jpg/800px-Premanand_Maharaj.jpg'; this.onerror=function(){this.style.display='none'; this.nextElementSibling.style.display='flex';}">
+              <div class="hero-img-placeholder" style="display:none">ॐ</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-name gold-shimmer" id="hero-name">श्री प्रेमानंद जी महाराज</div>
+        <div class="hero-tagline" id="hero-tagline">।। हरि ॐ तत्सत् ।।</div>
+      </div>
+
+      <div class="divider-om">🪷</div>
+
+      <div class="quote-box" style="margin: 0 16px 16px;">
+        <div class="quote-text" id="daily-quote">
+          "जहाँ राम का नाम है, वहाँ सब कुछ है।<br>नाम ही परमात्मा का स्वरूप है।"
+        </div>
+      </div>
+
+      <!-- आज का श्लोक -->
+      <div style="padding: 0 16px 16px;">
+        <div class="section-header" style="padding: 0 0 10px 0;">
+          <div class="section-icon">✨</div>
+          <div class="section-title" id="lbl-featured-verse">आज का श्लोक</div>
+        </div>
+        <div class="quote-box" style="margin: 0;">
+          <div style="font-family:'Cinzel Decorative',cursive; font-size:3vw; color:var(--deep-gold); margin-bottom:8px;">
+            अध्याय २ • श्लोक ४७
+          </div>
+          <div class="quote-text" style="font-size:4vw; margin-bottom:8px;" id="featured-verse-hi">
+            कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।<br>
+            मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि।।
+          </div>
+          <div style="font-family:'EB Garamond',serif; font-size:3.5vw; color:rgba(255,243,208,0.7); font-style:italic;" id="featured-verse-en">
+            You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions.
+          </div>
+        </div>
+      </div>
+
+      <!-- SOUND CONTROL -->
+      <div style="display:flex; align-items:center; gap:10px; padding: 0 16px 12px;">
+        <div style="font-family:'Yatra One',cursive; font-size:3.5vw; color:var(--saffron-light);" id="lbl-ambient">परिवेश ध्वनि:</div>
+        <button onclick="toggleAmbient()" id="ambient-btn"
+          style="background:rgba(212,168,85,0.15); border:1px solid rgba(212,168,85,0.3); border-radius:20px; padding:6px 14px; color:var(--gold); cursor:pointer; font-size:3.5vw; font-family:'Yatra One',cursive;">
+          🔔 <span id="ambient-label">चालू</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- PRAVACHAN SECTION -->
+    <div class="section" id="sec-pravachan">
+
+      <div class="section-header" style="justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="section-icon">🎙️</div>
+          <div class="section-title" id="sec-prav-title">प्रवचन सुनें</div>
+        </div>
+        <div style="position:relative; display:flex; align-items:center;">
+          <span style="position:absolute;left:10px;font-size:14px;color:rgba(212,168,85,0.6);pointer-events:none;">🔍</span>
+          <input id="pravachan-search" type="text" placeholder="खोजें…" oninput="renderPravachanList()"
+            style="background:rgba(212,168,85,0.08);border:1px solid rgba(212,168,85,0.3);border-radius:20px;
+                   padding:6px 12px 6px 30px;color:var(--text-light);font-family:'Tiro Devanagari Hindi',serif;
+                   font-size:3.2vw;width:36vw;outline:none;caret-color:var(--gold);">
+        </div>
+      </div>
+
+      <!-- PLAYER -->
+      <div class="audio-player" id="audio-player">
+        <div class="player-title" id="player-now-playing">— चयन करें —</div>
+        <div class="waveform" id="waveform">
+          <!-- bars generated by JS -->
+        </div>
+        <div class="progress-wrap" id="progress-wrap" onclick="seekAudio(event)">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="time-row">
+          <span id="time-current">0:00</span>
+          <span id="time-total">0:00</span>
+        </div>
+        <div class="player-controls" id="player-actions">
+          <button class="player-action-btn" id="player-fav-btn" onclick="togglePlayerFav()" title="पसंदीदा">☆</button>
+          <button class="ctrl-btn" onclick="prevTrack()">⏮</button>
+          <button class="ctrl-btn play-btn" id="play-btn" onclick="togglePlay()">▶️</button>
+          <button class="ctrl-btn" onclick="nextTrack()">⏭</button>
+          <button class="player-action-btn" id="player-dl-btn" onclick="downloadCurrentTrack()" title="डाउनलोड">⬇</button>
+        </div>
+      </div>
+
+      <div class="pravachan-list" id="pravachan-list">
+        <!-- cards injected by JS -->
+      </div>
+
+      <!-- Remote pravachan fetch bar -->
+      <div class="remote-bar" id="remote-bar" style="margin-top:14px;">
+        <div>
+          <div class="remote-bar-text" id="remote-bar-text">नए प्रवचन देखें</div>
+          <div class="remote-bar-sub" id="remote-bar-sub">नए प्रवचन लोड करें</div>
+        </div>
+        <button class="btn-fetch" id="btn-fetch" onclick="fetchRemotePravachans()">🔄 देखें</button>
+      </div>
+    </div>
+
+    <!-- GITA SECTION -->
+    <div class="section" id="sec-gita">
+      <div class="section-header">
+        <div class="section-icon">📖</div>
+        <div class="section-title" id="sec-gita-title">भगवद् गीता</div>
+      </div>
+      <div class="gita-section">
+        <div class="gita-card" onclick="openGita()">
+          <div class="gita-icon">🕉️</div>
+          <div class="gita-title" id="gita-open-lbl">भगवद् गीता पढ़ें</div>
+          <div class="gita-sub" id="gita-sub-lbl">श्रीमद् भगवद् गीता — 18 अध्याय</div>
+          <div style="margin-top: 14px; font-size: 3.5vw; color: rgba(255,243,208,0.5);" id="gita-resume-lbl">
+            <!-- resume text shown by JS -->
+          </div>
+        </div>
+
+        <!-- PDF Reader Card -->
+        <div class="gita-card" onclick="handlePdfCardTap()" style="margin-top:14px; background: linear-gradient(135deg, rgba(139,69,19,0.18) 0%, rgba(26,8,0,0.95) 100%); border-color: rgba(139,90,43,0.4);">
+          <div class="gita-icon">📜</div>
+          <div class="gita-title" id="gita-pdf-lbl">सम्पूर्ण भगवद् गीता पढ़ें</div>
+          <div style="margin-top:10px; display:flex; align-items:center; justify-content:center; gap:8px;">
+            <span style="font-size:3vw; color:rgba(255,243,208,0.45); font-family:'EB Garamond',serif;" id="gita-pdf-resume-lbl"></span>
+          </div>
+          <div style="display:flex; justify-content:flex-end; margin-top:14px;">
+            <button id="pdf-dl-btn" class="dl-btn" onclick="event.stopPropagation(); handlePdfCardTap()" style="font-size:3vw; padding:6px 14px; position:relative; z-index:2;">⬇ डाउनलोड</button>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <!-- ABOUT SECTION -->
+    <div class="section" id="sec-about">
+      <div class="section-header">
+        <div class="section-icon">🌸</div>
+        <div class="section-title" id="sec-about-title">परिचय</div>
+      </div>
+      <div class="about-card">
+        <div class="about-text" id="about-text-hi">
+          श्री प्रेमानंद जी महाराज एक प्रसिद्ध संत एवं आध्यात्मिक गुरु हैं। वृन्दावन में निवास करते हुए, वे भक्ति, प्रेम और भगवान की कृपा का संदेश फैलाते हैं।<br><br>
+          उनके प्रवचन हिंदी एवं संस्कृत में होते हैं और लाखों भक्तों को प्रेरित करते हैं। वे भगवान श्रीकृष्ण और श्रीराम के परम भक्त हैं।
+        </div>
+        <div class="about-text" id="about-text-en" style="display:none">
+          Shri Premanand Ji Maharaj is a revered saint and spiritual teacher residing in Vrindavan. He spreads the message of devotion, love, and divine grace.
+          <br><br>
+          His discourses in Hindi and Sanskrit inspire millions of devotees. He is a supreme devotee of Lord Krishna and Lord Ram.
+        </div>
+
+        <div class="quote-box" style="margin-top: 16px;">
+          <div class="quote-text" style="font-size:4vw;" id="about-quote">
+            "भगवान के नाम में अपार शक्ति है —<br>जो नाम जपता है, उसका उद्धार होता है।"
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end scroll-area -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="nav-home" onclick="switchSection('home')">
+      <div class="nav-icon">
+        <!-- Om / Home: lotus petal house shape -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 10.5L12 3l9 7.5V21a1 1 0 01-1 1H5a1 1 0 01-1-1V10.5z" stroke-linejoin="round"/>
+          <path d="M9 21V13h6v8" stroke-linejoin="round"/>
+          <!-- small diya flame at top -->
+          <path d="M12 7 Q13 5.5 12 4.5 Q11 5.5 12 7z" class="fill-icon"/>
+        </svg>
+      </div>
+      <div class="nav-label" id="nav-lbl-home">होम</div>
+    </button>
+    <button class="nav-item" id="nav-pravachan" onclick="switchSection('pravachan')">
+      <div class="nav-icon">
+        <!-- Conch / speaker: spiritual pravachan symbol -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 8.5C9 6 11 4 13.5 4S18 6 18 8.5c0 3.5-4 7-6 9" stroke-linecap="round"/>
+          <path d="M9 8.5C9 11 7 13.5 6 15.5c-1 2-1 4 1.5 4.5" stroke-linecap="round"/>
+          <path d="M12 15.5c.5 1.5.5 3-1 4" stroke-linecap="round"/>
+          <circle cx="13.5" cy="8.5" r="1.2" class="fill-icon"/>
+        </svg>
+      </div>
+      <div class="nav-label" id="nav-lbl-pravachan">प्रवचन</div>
+    </button>
+    <button class="nav-item" id="nav-gita" onclick="switchSection('gita')">
+      <div class="nav-icon">
+        <!-- Open book / Gita -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 6C10 4.5 7 4 4 5v14c3-1 6-.5 8 1V6z" stroke-linejoin="round"/>
+          <path d="M12 6c2-1.5 5-2 8-1v14c-3-1-6-.5-8 1V6z" stroke-linejoin="round"/>
+          <path d="M12 6v14" />
+          <!-- decorative line on left page -->
+          <line x1="6.5" y1="9" x2="10" y2="9" stroke-linecap="round"/>
+          <line x1="6.5" y1="12" x2="10" y2="12" stroke-linecap="round"/>
+          <line x1="6.5" y1="15" x2="10" y2="15" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="nav-label" id="nav-lbl-gita">गीता</div>
+    </button>
+    <button class="nav-item" id="nav-about" onclick="switchSection('about')">
+      <div class="nav-icon">
+        <!-- Lotus flower: spiritual / about symbol -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <!-- center petal -->
+          <path d="M12 16 Q12 10 12 7 Q14 10 12 16z" class="fill-icon" opacity="0.9"/>
+          <path d="M12 16 Q12 10 12 7 Q10 10 12 16z" class="fill-icon" opacity="0.9"/>
+          <!-- side petals -->
+          <path d="M12 15 Q8 13 6 10 Q9 11 12 15z" class="fill-icon" opacity="0.75"/>
+          <path d="M12 15 Q16 13 18 10 Q15 11 12 15z" class="fill-icon" opacity="0.75"/>
+          <!-- outer petals -->
+          <path d="M12 15 Q7 15 5 13 Q8 13.5 12 15z" class="fill-icon" opacity="0.55"/>
+          <path d="M12 15 Q17 15 19 13 Q16 13.5 12 15z" class="fill-icon" opacity="0.55"/>
+          <!-- stem -->
+          <path d="M12 16 Q11 18.5 10 20" stroke-linecap="round"/>
+          <path d="M12 16 Q13 18.5 14 20" stroke-linecap="round"/>
+          <path d="M12 17 L12 21" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="nav-label" id="nav-lbl-about">परिचय</div>
+    </button>
+  </nav>
+
+</div><!-- end app -->
+
+<!-- PDF OVERLAY -->
+<div id="pdf-overlay">
+  <div class="pdf-topbar">
+    <button class="pdf-close" onclick="closeGita()">✕</button>
+    <div class="pdf-title">🕉️ <span id="pdf-title-lbl">भगवद् गीता</span></div>
+    <div class="pdf-page-info" id="pdf-page-info">अ॰ 1</div>
+  </div>
+
+  <div class="book-container">
+    <div class="book-spine">
+      <div class="book-spine-text">BHAGAVAD GITA</div>
+    </div>
+    <div class="book-pages-scroll" id="book-scroll">
+      <div id="book-pages-content">
+        <!-- Pages rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <div class="pdf-controls">
+    <button class="pdf-nav-btn" id="prev-chapter-btn" onclick="prevChapter()">◀ पूर्व</button>
+    <div class="pdf-progress" onclick="jumpToChapter(event)">
+      <div class="pdf-progress-fill" id="pdf-progress"></div>
+    </div>
+    <button class="pdf-nav-btn" id="next-chapter-btn" onclick="nextChapter()">आगे ▶</button>
+  </div>
+</div>
+
+
+<audio id="pravachan-audio"></audio>
+
+<!-- PDF FILE OVERLAY -->
+<!-- Bhagavad Gita PDF loads from HuggingFace: Prabeenh/premanandji-db -->
+<div id="pdf-file-overlay" style="
+  position:fixed; inset:0; z-index:600;
+  display:none; flex-direction:column;
+  background:#0D0500;
+  transform:translateY(100%);
+  transition: transform 0.6s cubic-bezier(0.34,1.2,0.64,1);
+">
+  <!-- Top bar -->
+  <div style="
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 16px; flex-shrink:0;
+    background:linear-gradient(180deg,rgba(26,8,0,1) 0%,rgba(26,14,0,0.92) 100%);
+    border-bottom:1px solid rgba(212,168,85,0.3);
+  ">
+    <button onclick="closeGitaPdf()" style="
+      background:rgba(212,168,85,0.15); border:1px solid rgba(212,168,85,0.3);
+      border-radius:50%; width:36px; height:36px;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; font-size:18px; color:var(--gold);">✕</button>
+    <div style="font-family:'Yatra One',cursive; font-size:4.5vw; color:var(--gold); text-shadow:0 0 8px var(--shadow-gold);">
+      📜 <span id="pdf-file-title">सम्पूर्ण भगवद् गीता</span>
+    </div>
+    <div id="pdf-file-pageinfo" style="font-size:3vw; color:var(--saffron-light); font-family:'EB Garamond',serif;">
+      पृ॰ —
+    </div>
+  </div>
+
+  <!-- Book-style wrapper -->
+  <div style="flex:1; position:relative; overflow:hidden; display:flex; flex-direction:column;">
+
+    <!-- Spine decoration -->
+    <div style="
+      position:absolute; left:0; top:0; bottom:0; width:18px; z-index:10; pointer-events:none;
+      background:linear-gradient(90deg,#6b2f00,#8B4513,#6b2f00);
+      box-shadow:3px 0 10px rgba(0,0,0,0.7);
+      display:flex; align-items:center; justify-content:center;
+    ">
+      <div style="writing-mode:vertical-rl; font-family:'Cinzel Decorative',cursive; font-size:7px; color:var(--gold); letter-spacing:3px; opacity:0.8;">BHAGAVAD GITA</div>
+    </div>
+
+    <!-- Page turn light effect -->
+    <div id="pdf-page-glow" style="
+      position:absolute; right:0; top:0; bottom:0; width:30px; z-index:10; pointer-events:none;
+      background:linear-gradient(90deg,transparent,rgba(255,220,150,0.06));
+    "></div>
+
+    <!-- Zoom indicator (shown briefly during pinch) -->
+    <div id="pdf-zoom-indicator" style="
+      position:absolute; top:12px; right:12px; z-index:20;
+      background:rgba(26,8,0,0.82); border:1px solid rgba(212,168,85,0.4);
+      border-radius:20px; padding:5px 12px;
+      font-family:'EB Garamond',serif; font-size:3vw; color:var(--gold);
+      opacity:0; transition:opacity 0.3s; pointer-events:none;
+    " id="pdf-zoom-ind">100%</div>
+
+    <!-- Reset zoom button (visible only when zoomed) -->
+    <button id="pdf-zoom-reset-btn" onclick="resetPdfZoom(true)" style="
+      position:absolute; bottom:16px; right:16px; z-index:20;
+      background:rgba(212,168,85,0.18); border:1px solid rgba(212,168,85,0.45);
+      border-radius:20px; padding:6px 14px;
+      font-family:'Yatra One',cursive; font-size:3vw; color:var(--gold);
+      cursor:pointer; display:none;
+    ">↺ रीसेट</button>
+
+    <!-- PDF Embed inside a parchment frame -->
+    <div style="
+      flex:1; margin:0 0 0 18px;
+      background:linear-gradient(160deg,#FFF8E7 0%,#FFEFCC 60%,#FFE5A0 100%);
+      position:relative; overflow:hidden;
+      box-shadow:inset 4px 0 12px rgba(0,0,0,0.15), inset -2px 0 8px rgba(180,120,60,0.1);
+    ">
+      <!-- Loading state -->
+      <div id="pdf-file-loading" style="
+        position:absolute; inset:0; display:flex; flex-direction:column;
+        align-items:center; justify-content:center; gap:16px;
+        background:linear-gradient(160deg,#FFF8E7,#FFE5A0);
+        z-index:5;
+      ">
+        <div style="font-size:48px; animation:omPulse 2s ease-in-out infinite;">🕉️</div>
+        <div style="font-family:'Yatra One',cursive; font-size:4.5vw; color:#4a2000;" id="pdf-loading-txt">
+          पीडीएफ लोड हो रहा है…
+        </div>
+        <div style="display:flex; gap:6px;">
+          <div class="splash-dot" style="background:#B8860B;"></div>
+          <div class="splash-dot" style="background:#B8860B; animation-delay:0.2s;"></div>
+          <div class="splash-dot" style="background:#B8860B; animation-delay:0.4s;"></div>
+        </div>
+      </div>
+
+      <!-- PDF.js canvas scroll container -->
+      <div id="pdf-canvas-scroll" style="
+        position:absolute; inset:0; overflow:hidden;
+        display:none;
+        padding: 12px 10px 20px 10px;
+        background:linear-gradient(160deg,#FFF8E7,#FFEFCC);
+        touch-action: none; user-select: none; cursor: grab;
+      ">
+        <!-- zoom+pan layer wraps the canvas; JS applies transform here -->
+        <div id="pdf-zoom-layer" style="
+          transform-origin: 0 0; will-change: transform;
+          display: inline-block; min-width: 100%;
+        "></div>
+      </div>
+
+      <!-- Fallback message shown if PDF.js fails -->
+      <div id="pdf-fallback" style="
+        display:none; position:absolute; inset:0;
+        flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:24px;
+        background:linear-gradient(160deg,#FFF8E7,#FFE5A0); text-align:center;
+      ">
+        <div style="font-size:44px;">📜</div>
+        <div style="font-family:'Yatra One',cursive; font-size:5vw; color:#4a2000;" id="pdf-fallback-title">PDF नहीं मिली</div>
+        <div style="font-size:3.5vw; color:#7a4000; line-height:1.7; font-family:'EB Garamond',serif;" id="pdf-fallback-msg">
+          PDF लोड नहीं हो सकी। कृपया इंटरनेट कनेक्शन जाँचें।<br><br>
+          Could not load PDF. Please check your internet connection.
+        </div>
+        <a id="pdf-direct-link" href="https://huggingface.co/Prabeenh/premanandji-db/resolve/main/gita.pdf?download=true" target="_blank" style="
+          display:inline-block; margin-top:8px;
+          background:linear-gradient(135deg,var(--saffron),var(--deep-gold));
+          color:white; padding:10px 24px; border-radius:20px;
+          font-family:'Yatra One',cursive; font-size:4vw;
+          text-decoration:none; box-shadow:0 4px 12px rgba(255,107,0,0.4);
+        " id="pdf-open-lbl">नई टैब में खोलें</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom nav bar for PDF -->
+  <div style="
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 14px; flex-shrink:0;
+    background:rgba(13,5,0,0.97); border-top:1px solid rgba(212,168,85,0.2);
+    gap:8px;
+  ">
+    <button id="pdf-prev-page-btn" onclick="showPdfPage(currentPdfPage - 1)" disabled style="
+      background:rgba(212,168,85,0.15); border:1px solid rgba(212,168,85,0.3);
+      border-radius:10px; padding:8px 16px;
+      color:var(--gold); cursor:pointer; font-size:3.5vw;
+      font-family:'Yatra One',cursive; transition:all 0.2s;
+    ">◀ पूर्व</button>
+
+    <div style="flex:1; text-align:center;">
+      <div style="font-size:3vw; color:rgba(255,243,208,0.4); font-family:'EB Garamond',serif;" id="pdf-file-hint">
+        📌 स्थान स्वतः सहेजा जाता है
+      </div>
+    </div>
+
+    <button id="pdf-next-page-btn" onclick="showPdfPage(currentPdfPage + 1)" disabled style="
+      background:rgba(212,168,85,0.15); border:1px solid rgba(212,168,85,0.3);
+      border-radius:10px; padding:8px 16px;
+      color:var(--gold); cursor:pointer; font-size:3.5vw;
+      font-family:'Yatra One',cursive; transition:all 0.2s;
+    ">आगे ▶</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// LANGUAGE
+// ============================================================
+let currentLang = 'hi';
+
+const translations = {
+  hi: {
+    navHome: 'होम', navPravachan: 'प्रवचन', navGita: 'गीता', navAbout: 'परिचय',
+    secPrav: 'प्रवचन सुनें', secGita: 'भगवद् गीता', secAbout: 'परिचय',
+    heroName: 'श्री प्रेमानंद जी महाराज',
+    heroTagline: '।। हरि ॐ तत्सत् ।।',
+    gitaOpen: 'भगवद् गीता पढ़ें',
+    gitaSub: 'श्रीमद् भगवद् गीता — 18 अध्याय',
+    gitaPdf: 'सम्पूर्ण भगवद् गीता पढ़ें',
+    ambient: 'परिवेश ध्वनि:',
+    ambientOn: 'चालू', ambientOff: 'बंद',
+    featuredVerse: 'आज का श्लोक',
+    pdfTitle: 'भगवद् गीता',
+    pdfFileTitle: 'सम्पूर्ण भगवद् गीता',
+    prevCh: '◀ पूर्व', nextCh: 'आगे ▶',
+    resumeText: 'अंतिम पढ़ा: अध्याय ',
+    chapterOf: ' / 18',
+    noResume: 'पहले अध्याय से शुरू करें',
+    pdfLoading: 'पीडीएफ लोड हो रहा है…',
+    pdfHint: '📌 स्थान स्वतः सहेजा जाता है',
+    pdfDownload: '⬇ डाउनलोड',
+    pdfOpenTab: 'नई टैब में खोलें',
+    pdfPageInfo: 'पृ॰ ',
+    pdfResumeText: 'अंतिम पृष्ठ: ',
+    pdfNoResume: 'प्रथम पृष्ठ से',
+  },
+  en: {
+    navHome: 'Home', navPravachan: 'Pravachan', navGita: 'Gita', navAbout: 'About',
+    secPrav: 'Listen to Pravachan', secGita: 'Bhagavad Gita', secAbout: 'About',
+    heroName: 'Shri Premanand Ji Maharaj',
+    heroTagline: '।। Hari Om Tat Sat ।।',
+    gitaOpen: 'Read Bhagavad Gita',
+    gitaSub: 'Shrimad Bhagavad Gita — 18 Chapters',
+    gitaPdf: 'Read Original PDF',
+    ambient: 'Ambient Sound:',
+    ambientOn: 'On', ambientOff: 'Off',
+    featuredVerse: "Today's Verse",
+    pdfTitle: 'Bhagavad Gita',
+    pdfFileTitle: 'Gita Original PDF',
+    prevCh: '◀ Prev', nextCh: 'Next ▶',
+    resumeText: 'Last read: Chapter ',
+    chapterOf: ' / 18',
+    noResume: 'Start from Chapter 1',
+    pdfLoading: 'Loading PDF…',
+    pdfHint: '📌 Position auto-saved',
+    pdfDownload: '⬇ Download',
+    pdfOpenTab: 'Open in new tab',
+    pdfPageInfo: 'Pg. ',
+    pdfResumeText: 'Last page: ',
+    pdfNoResume: 'From first page',
+  }
+};
+
+function setLang(lang) {
+  currentLang = lang;
+  const t = translations[lang];
+  document.getElementById('nav-lbl-home').textContent = t.navHome;
+  document.getElementById('nav-lbl-pravachan').textContent = t.navPravachan;
+  document.getElementById('nav-lbl-gita').textContent = t.navGita;
+  document.getElementById('nav-lbl-about').textContent = t.navAbout;
+  document.getElementById('sec-prav-title').textContent = t.secPrav;
+  document.getElementById('sec-gita-title').textContent = t.secGita;
+  document.getElementById('sec-about-title').textContent = t.secAbout;
+  document.getElementById('hero-name').textContent = t.heroName;
+  document.getElementById('hero-tagline').textContent = t.heroTagline;
+  document.getElementById('gita-open-lbl').textContent = t.gitaOpen;
+  document.getElementById('gita-sub-lbl').textContent = t.gitaSub;
+  document.getElementById('gita-pdf-lbl').textContent = t.gitaPdf;
+  document.getElementById('lbl-ambient').textContent = t.ambient;
+  document.getElementById('lbl-featured-verse').textContent = t.featuredVerse;
+  document.getElementById('pdf-title-lbl').textContent = t.pdfTitle;
+  document.getElementById('pdf-file-title').textContent = t.pdfFileTitle;
+  document.getElementById('prev-chapter-btn').textContent = t.prevCh;
+  document.getElementById('next-chapter-btn').textContent = t.nextCh;
+  document.getElementById('pdf-loading-txt').textContent = t.pdfLoading;
+  document.getElementById('pdf-file-hint').textContent = t.pdfHint;
+  document.getElementById('pdf-download-lbl').textContent = t.pdfDownload;
+  document.getElementById('pdf-open-lbl').textContent = t.pdfOpenTab;
+
+  // about text
+  document.getElementById('about-text-hi').style.display = lang === 'hi' ? '' : 'none';
+  document.getElementById('about-text-en').style.display = lang === 'en' ? '' : 'none';
+
+  // lang buttons
+  document.getElementById('btn-hi').classList.toggle('active', lang === 'hi');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+
+  // update resume label
+  updateGitaResume();
+  updatePdfResume();
+
+  // re-render pravachan if needed
+  renderPravachanList();
+
+  // re-render book if open
+  if (document.getElementById('pdf-overlay').classList.contains('open')) {
+    renderCurrentChapter();
+  }
+
+  document.documentElement.lang = lang;
+}
+
+// ============================================================
+// SECTION SWITCHING
+// ============================================================
+function switchSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+  document.getElementById('nav-' + name).classList.add('active');
+  document.getElementById('main-scroll').scrollTop = 0;
+  if (name === 'gita') updatePdfDlBtn();
+}
+
+// ============================================================
+// PARTICLES
+// ============================================================
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function createParticles() {
+  particles = [];
+  for (let i = 0; i < 60; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 2 + 0.5,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: -Math.random() * 0.5 - 0.2,
+      alpha: Math.random() * 0.6 + 0.2,
+      color: Math.random() > 0.5 ? '#D4A855' : '#FF6B00',
+    });
+  }
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.alpha -= 0.002;
+    if (p.alpha <= 0 || p.y < -10) {
+      p.x = Math.random() * canvas.width;
+      p.y = canvas.height + 10;
+      p.alpha = Math.random() * 0.6 + 0.2;
+    }
+    ctx.save();
+    ctx.globalAlpha = p.alpha;
+    ctx.fillStyle = p.color;
+    ctx.shadowColor = p.color;
+    ctx.shadowBlur = 6;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  });
+  requestAnimationFrame(animateParticles);
+}
+
+resizeCanvas();
+createParticles();
+animateParticles();
+window.addEventListener('resize', () => { resizeCanvas(); createParticles(); });
+
+// ============================================================
+// SPLASH
+// ============================================================
+let splashDismissed = false;
+
+function dismissSplash() {
+  if (splashDismissed) return;
+  splashDismissed = true;
+  const splash = document.getElementById('splash');
+  splash.classList.add('fade-out');
+  const app = document.getElementById('app');
+  app.classList.add('visible');
+  setTimeout(() => { splash.style.display = 'none'; }, 1400);
+  // Only start ambient if user hasn't turned it off
+  if (ambientOn) startAmbient();
+  // Sync button label with saved preference
+  const t = translations[currentLang];
+  document.getElementById('ambient-label').textContent = ambientOn ? t.ambientOn : t.ambientOff;
+}
+
+window.addEventListener('load', () => {
+  // Auto-dismiss after 5s even without tap (ambient won't play until user taps something)
+  setTimeout(() => { dismissSplash(); }, 5000);
+});
+
+document.getElementById('splash').addEventListener('click', () => { dismissSplash(); });
+
+// ============================================================
+// AMBIENT SOUND -- spiritual Om swells with reverb, no constant bass
+// ============================================================
+let ambientOn = localStorage.getItem('pj_ambient') !== 'off'; // default on
+let ambientCtx = null;
+let ambientGain = null;
+let ambientStarted = false;
+
+// Build convolution reverb from noise (gives spacious temple hall feel)
+function buildReverb(ctx, duration, decay) {
+  const rate    = ctx.sampleRate;
+  const length  = Math.floor(rate * duration);
+  const impulse = ctx.createBuffer(2, length, rate);
+  for (let c = 0; c < 2; c++) {
+    const ch = impulse.getChannelData(c);
+    for (let i = 0; i < length; i++) {
+      ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
+    }
+  }
+  const node = ctx.createConvolver();
+  node.buffer = impulse;
+  return node;
+}
+
+// One Om-like swell: silent -> fade in -> hold -> fade out (like a human breath)
+function playOmSwell(ctx, dryOut, wetOut, freq, vol, totalDur) {
+  const now  = ctx.currentTime;
+  const osc  = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(freq, now);
+  // Envelope: 3s rise, hold, 4s fall
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(vol, now + 3);
+  gain.gain.setValueAtTime(vol, now + Math.max(totalDur - 4, 3.5));
+  gain.gain.linearRampToValueAtTime(0, now + totalDur);
+  osc.connect(gain);
+  gain.connect(dryOut);
+  gain.connect(wetOut);
+  osc.start(now);
+  osc.stop(now + totalDur + 0.1);
+}
+
+function startAmbient() {
+  if (ambientStarted) return;
+  try {
+    ambientCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ambientCtx.state === 'suspended') ambientCtx.resume();
+    ambientStarted = true;
+
+    // Master gain -- fades in over 5s
+    ambientGain = ambientCtx.createGain();
+    ambientGain.gain.setValueAtTime(0, ambientCtx.currentTime);
+    ambientGain.gain.linearRampToValueAtTime(0.7, ambientCtx.currentTime + 5);
+    ambientGain.connect(ambientCtx.destination);
+
+    const reverb = buildReverb(ambientCtx, 4.5, 2.5);
+
+    // Dry signal (very faint -- reverb carries most of the sound)
+    const dryGain = ambientCtx.createGain();
+    dryGain.gain.setValueAtTime(0.08, ambientCtx.currentTime);
+    dryGain.connect(ambientGain);
+
+    // Wet reverb signal (dominant)
+    const wetGain = ambientCtx.createGain();
+    wetGain.gain.setValueAtTime(0.92, ambientCtx.currentTime);
+    reverb.connect(wetGain);
+    wetGain.connect(ambientGain);
+
+    // Mid-range notes only -- A3, D4, E4, A4 (no heavy bass)
+    // Staggered start + offset cycle so they never all peak together
+    const voices = [
+      { freq: 220.0, vol: 0.20, cycle: 20, offset: 0    },  // A3
+      { freq: 293.7, vol: 0.14, cycle: 22, offset: 5    },  // D4
+      { freq: 329.6, vol: 0.10, cycle: 19, offset: 9    },  // E4
+      { freq: 440.0, vol: 0.07, cycle: 24, offset: 14   },  // A4 shimmer
+    ];
+
+    voices.forEach(v => {
+      function sched() {
+        if (!ambientOn) { setTimeout(sched, 2000); return; }
+        playOmSwell(ambientCtx, dryGain, reverb, v.freq, v.vol, v.cycle - 1);
+        setTimeout(sched, v.cycle * 1000);
+      }
+      setTimeout(sched, v.offset * 1000 + 400);
+    });
+
+    // Temple bell -- two sine partials, very gentle, every 18-28s
+    function ringBell() {
+      if (!ambientOn || !ambientCtx) return;
+      const now = ambientCtx.currentTime;
+      [528, 1320].forEach((freq, i) => {
+        const o = ambientCtx.createOscillator();
+        const g = ambientCtx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(freq, now);
+        g.gain.setValueAtTime(0, now);
+        g.gain.linearRampToValueAtTime(i === 0 ? 0.015 : 0.006, now + 0.05);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 6);
+        o.connect(g);
+        g.connect(reverb);  // only through reverb -- no harsh direct sound
+        o.start(now); o.stop(now + 6.1);
+      });
+      setTimeout(ringBell, 18000 + Math.random() * 10000);
+    }
+    setTimeout(ringBell, 9000);
+
+  } catch(e) {
+    console.warn('Ambient audio unavailable:', e);
+  }
+}
+
+function toggleAmbient() {
+  ambientOn = !ambientOn;
+  localStorage.setItem('pj_ambient', ambientOn ? 'on' : 'off');
+  const t = translations[currentLang];
+  document.getElementById('ambient-label').textContent = ambientOn ? t.ambientOn : t.ambientOff;
+  if (ambientOn && !ambientStarted) startAmbient();
+  if (ambientGain && ambientCtx) {
+    if (ambientOn) {
+      if (ambientCtx.state === 'suspended') ambientCtx.resume();
+      ambientGain.gain.setTargetAtTime(0.7, ambientCtx.currentTime, 1.5);
+    } else {
+      ambientGain.gain.setTargetAtTime(0, ambientCtx.currentTime, 1.5);
+    }
+  }
+}
+
+
+// ============================================================
+// PRAVACHAN DATA & PLAYER
+// ============================================================
+const pravachans = [
+  {
+    titleHi: 'भागवत कथा — अध्याय १',
+    titleEn: 'Bhagwat Katha — Chapter 1',
+    subtitleHi: 'श्रीमद् भागवतम् का अमृत',
+    subtitleEn: 'Nectar of Shrimad Bhagavatam',
+    duration: '45:22',
+    src: 'https://huggingface.co/Prabeenh/premanandji-db/resolve/main/pravachan_01.mp3?download=true',
+    filename: 'pravachan_01.mp3',
+    icon: '🙏',
+  },
+  {
+    titleHi: 'राम नाम की महिमा',
+    titleEn: 'Glory of Ram Naam',
+    subtitleHi: 'नाम जप का महत्व',
+    subtitleEn: 'Importance of Name Chanting',
+    duration: '38:15',
+    src: 'https://huggingface.co/Prabeenh/premanandji-db/resolve/main/pravachan_02.mp3?download=true',
+    filename: 'pravachan_02.mp3',
+    icon: '🕉️',
+  },
+  {
+    titleHi: 'भक्ति का मार्ग',
+    titleEn: 'Path of Devotion',
+    subtitleHi: 'भगवान की प्राप्ति का उपाय',
+    subtitleEn: 'Way to attain the Divine',
+    duration: '52:08',
+    src: 'https://huggingface.co/Prabeenh/premanandji-db/resolve/main/pravachan_03.mp3?download=true',
+    filename: 'pravachan_03.mp3',
+    icon: '🌺',
+  },
+  {
+    titleHi: 'गीता ज्ञान — कर्मयोग',
+    titleEn: 'Gita Knowledge — Karma Yoga',
+    subtitleHi: 'निष्काम कर्म का रहस्य',
+    subtitleEn: 'Secret of selfless action',
+    duration: '41:33',
+    src: 'https://huggingface.co/Prabeenh/premanandji-db/resolve/main/pravachan_04.mp3?download=true',
+    filename: 'pravachan_04.mp3',
+    icon: '📿',
+  },
+  {
+    titleHi: 'वृन्दावन की लीलाएं',
+    titleEn: 'Leelas of Vrindavan',
+    subtitleHi: 'राधा-कृष्ण की दिव्य कथा',
+    subtitleEn: 'Divine stories of Radha-Krishna',
+    duration: '58:47',
+    src: 'https://huggingface.co/Prabeenh/premanandji-db/resolve/main/pravachan_05.mp3?download=true',
+    filename: 'pravachan_05.mp3',
+    icon: '🦚',
+  },
+];
+
+let currentTrack = -1;
+let isPlaying = false;
+const audioEl = document.getElementById('pravachan-audio');
+
+// ============================================================
+// REMOTE PRAVACHAN — fetch new tracks from HuggingFace JSON
+// ============================================================
+const PRAVACHAN_JSON_URL =
+  'https://huggingface.co/Prabeenh/premanandji-db/resolve/main/pravachans.json';
+const MP3_BASE_URL =
+  'https://huggingface.co/Prabeenh/premanandji-db/resolve/main/';
+
+// remotePravachans: all tracks from JSON
+let remotePravachans = [];
+
+const PRAVACHAN_JSON_DB_KEY = 'pravachans.json'; // IndexedDB key for cached JSON
+
+// ── IndexedDB for storing MP3 blobs across sessions ──────────────────────
+const DB_NAME    = 'PJPravachans';
+const DB_VERSION = 1;
+const STORE_NAME = 'mp3s';
+let db = null;
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    if (db) { resolve(db); return; }
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = e => {
+      e.target.result.createObjectStore(STORE_NAME); // key = filename
+    };
+    req.onsuccess = e => { db = e.target.result; resolve(db); };
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+async function dbSave(filename, blob) {
+  const d = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx  = d.transaction(STORE_NAME, 'readwrite');
+    const req = tx.objectStore(STORE_NAME).put(blob, filename);
+    req.onsuccess = () => resolve();
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+async function dbLoad(filename) {
+  const d = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx  = d.transaction(STORE_NAME, 'readonly');
+    const req = tx.objectStore(STORE_NAME).get(filename);
+    req.onsuccess = e => resolve(e.target.result || null); // blob or null
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+async function dbListKeys() {
+  const d = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx  = d.transaction(STORE_NAME, 'readonly');
+    const req = tx.objectStore(STORE_NAME).getAllKeys();
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+// Restore already-downloaded tracks into pravachans list on startup
+async function restoreDownloadedTracks() {
+  // Load cached JSON first so remote track titles are available
+  try {
+    const jsonBlob = await dbLoad(PRAVACHAN_JSON_DB_KEY);
+    if (jsonBlob) {
+      const text = await jsonBlob.text();
+      const data = JSON.parse(text);
+      if (Array.isArray(data)) remotePravachans = data;
+    }
+  } catch(e) { console.warn('JSON cache load failed:', e); }
+
+  try {
+    const keys = await dbListKeys();
+    for (const filename of keys) {
+      if (filename === GITA_PDF_DB_KEY) continue;      // skip PDF
+      if (filename === PRAVACHAN_JSON_DB_KEY) continue; // skip cached JSON
+
+      const blob    = await dbLoad(filename);
+      if (!blob) continue;
+      const blobUrl = URL.createObjectURL(blob);
+
+      // Check if it's a built-in track — update src + blobUrl in place
+      const builtIn = pravachans.find(p => p.filename === filename);
+      if (builtIn) {
+        builtIn.blobUrl = blobUrl;
+        builtIn.src     = blobUrl;
+        continue;
+      }
+
+      // Remote downloaded track — add with correct titles from cached JSON
+      if (pravachans.find(p => p.filename === filename)) continue;
+      const meta = remotePravachans.find(t => t.filename === filename);
+      pravachans.push({
+        titleHi:    meta ? meta.titleHi    : filename,
+        titleEn:    meta ? meta.titleEn    : filename,
+        subtitleHi: meta ? meta.subtitleHi : '',
+        subtitleEn: meta ? meta.subtitleEn : '',
+        duration: '—:——', src: blobUrl, icon: meta ? getRemoteIcon(filename) : '🎙️',
+        isRemote: true, filename, blobUrl
+      });
+    }
+    if (keys.length > 0) renderPravachanList();
+    // Preload durations for ALL tracks now that blobs are ready
+    preloadDurationsFor(pravachans);
+  } catch(e) {
+    console.warn('restoreDownloadedTracks:', e);
+  }
+
+  // Restore last session AFTER blobs are ready — fixes offline play bug
+  restoreLastSession();
+}
+
+function isAlreadyInPlayer(filename) {
+  return pravachans.some(p => p.filename === filename);
+}
+
+async function fetchRemotePravachans(silent = false) {
+  const btn     = document.getElementById('btn-fetch');
+  const barText = document.getElementById('remote-bar-text');
+  const barSub  = document.getElementById('remote-bar-sub');
+  const bar     = document.getElementById('remote-bar');
+
+  if (!silent) {
+    btn.disabled = true;
+    btn.textContent = '⏳…';
+  }
+
+  try {
+    const res = await fetch(PRAVACHAN_JSON_URL + '?download=true&t=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+
+    remotePravachans = Array.isArray(data) ? data : [];
+
+    // Cache JSON in IndexedDB for offline use
+    try {
+      const jsonBlob = new Blob([JSON.stringify(remotePravachans)], { type: 'application/json' });
+      await dbSave(PRAVACHAN_JSON_DB_KEY, jsonBlob);
+    } catch(e) { console.warn('JSON cache save failed:', e); }
+
+    // Patch titles for already-restored tracks that used filename as fallback
+    remotePravachans.forEach(meta => {
+      const existing = pravachans.find(p => p.filename === meta.filename);
+      if (existing && existing.titleHi === meta.filename) {
+        existing.titleHi    = meta.titleHi;
+        existing.titleEn    = meta.titleEn;
+        existing.subtitleHi = meta.subtitleHi;
+        existing.subtitleEn = meta.subtitleEn;
+      }
+    });
+
+    const savedKeys = await dbListKeys();
+    const pending   = remotePravachans.filter(t =>
+      !savedKeys.includes(t.filename) && !isAlreadyInPlayer(t.filename)
+    );
+
+    // Restore any newly known downloaded tracks that weren't in DB yet
+    for (const meta of remotePravachans) {
+      if (savedKeys.includes(meta.filename) && !isAlreadyInPlayer(meta.filename)) {
+        const blob    = await dbLoad(meta.filename);
+        const blobUrl = URL.createObjectURL(blob);
+        pravachans.push({
+          titleHi: meta.titleHi, titleEn: meta.titleEn,
+          subtitleHi: meta.subtitleHi, subtitleEn: meta.subtitleEn,
+          duration: '—:——', src: blobUrl, icon: getRemoteIcon(meta.filename),
+          isRemote: true, filename: meta.filename, blobUrl
+        });
+      }
+    }
+
+    if (pending.length === 0) {
+      barText.textContent = currentLang === 'hi' ? 'सभी अपडेट हैं ✓' : 'All up to date ✓';
+      barSub.textContent  = '';
+      btn.textContent = '🔄';
+      btn.disabled = false;
+    } else {
+      barText.innerHTML = `${currentLang === 'hi' ? 'नए प्रवचन उपलब्ध' : 'New Pravachans Available'} <span style="background:var(--saffron);color:#1a0800;font-size:2.5vw;padding:2px 7px;border-radius:10px;margin-left:6px;font-family:'EB Garamond',serif;">${pending.length} NEW</span>`;
+      barSub.textContent  = currentLang === 'hi' ? 'नीचे डाउनलोड करें' : 'Tap ⬇ to download below';
+      btn.textContent = '🔄';
+      btn.disabled = false;
+      bar.style.borderColor = 'rgba(255,107,0,0.7)';
+      bar.style.boxShadow   = '0 0 14px rgba(255,107,0,0.25)';
+    }
+
+    renderPravachanList();
+    preloadDurationsFor(pravachans); // fetch metadata for newly added downloaded tracks
+
+  } catch(e) {
+    if (!silent) {
+      barText.textContent = currentLang === 'hi' ? 'नेटवर्क त्रुटि' : 'Network error';
+      barSub.textContent  = 'कृपया इंटरनेट जाँचें';
+      btn.textContent = '🔄 पुनः';
+      btn.disabled = false;
+    }
+    console.warn('Remote pravachan fetch failed:', e.message);
+  }
+}
+
+async function downloadAndPlay(filename, cardEl, playAfter) {
+  const dlBtn = cardEl ? cardEl.querySelector('.dl-btn') : null;
+  if (dlBtn) { dlBtn.disabled = true; dlBtn.textContent = '⏳…'; }
+
+  try {
+    const url = MP3_BASE_URL + encodeURIComponent(filename) + '?download=true';
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const blob    = await res.blob();
+
+    // Save blob to IndexedDB — persists across restarts
+    await dbSave(filename, blob);
+
+    const blobUrl = URL.createObjectURL(blob);
+
+    // Update remote track record
+    const track = remotePravachans.find(t => t.filename === filename);
+    if (track) track.blobUrl = blobUrl;
+
+    // Update or add to pravachans list
+    let idx = pravachans.findIndex(p => p.filename === filename);
+    if (idx === -1) {
+      pravachans.push({
+        titleHi:    track ? track.titleHi    : filename,
+        titleEn:    track ? track.titleEn    : filename,
+        subtitleHi: track ? track.subtitleHi : '',
+        subtitleEn: track ? track.subtitleEn : '',
+        duration: '—:——', src: blobUrl, icon: getRemoteIcon(filename),
+        isRemote: true, filename, blobUrl
+      });
+      idx = pravachans.length - 1;
+    } else {
+      pravachans[idx].src             = blobUrl;
+      pravachans[idx].blobUrl         = blobUrl;
+    }
+
+    renderPravachanList();
+    // Fetch metadata so duration shows immediately after download
+    preloadDurationsFor([pravachans[idx]]);
+    if (playAfter) selectTrack(idx);
+
+  } catch(e) {
+    if (dlBtn) { dlBtn.textContent = '✗ त्रुटि'; dlBtn.disabled = false; }
+    console.error('Download failed:', e);
+  }
+}
+
+// Cache a built-in (streaming) track into IndexedDB so it works offline
+async function cacheBuiltIn(index, cardEl) {
+  const p     = pravachans[index];
+  const dlBtn = cardEl ? cardEl.querySelector('.dl-btn') : null;
+  if (dlBtn) { dlBtn.disabled = true; dlBtn.textContent = '⏳…'; }
+  try {
+    const res = await fetch(p.src);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const blob    = await res.blob();
+    await dbSave(p.filename, blob);
+    const blobUrl = URL.createObjectURL(blob);
+    pravachans[index].blobUrl = blobUrl;
+    pravachans[index].src     = blobUrl;   // switch to local blob for this session
+    renderPravachanList();
+    if (index === currentTrack) updatePlayerButtons();
+  } catch(e) {
+    if (dlBtn) { dlBtn.textContent = '✗ त्रुटि'; dlBtn.disabled = false; }
+    console.error('Cache failed:', e);
+  }
+}
+
+// ── Favorites ────────────────────────────────────────────────
+function getFavs() {
+  try { return JSON.parse(localStorage.getItem('pj_favs') || '[]'); } catch { return []; }
+}
+function toggleFav(filename) {
+  const favs = getFavs();
+  const idx = favs.indexOf(filename);
+  if (idx === -1) favs.push(filename); else favs.splice(idx, 1);
+  localStorage.setItem('pj_favs', JSON.stringify(favs));
+}
+function isFav(filename) { return getFavs().includes(filename); }
+
+// Icons pool for JSON-loaded remote tracks (cycles through)
+const REMOTE_ICONS = ['🕉️','🪔','📿','🌺','🙏','🦚','🌸','🪷','✨','🎵'];
+function getRemoteIcon(filename) {
+  let hash = 0;
+  for (let i = 0; i < filename.length; i++) hash = (hash * 31 + filename.charCodeAt(i)) & 0xffff;
+  return REMOTE_ICONS[hash % REMOTE_ICONS.length];
+}
+
+function renderPravachanList() {
+  const list   = document.getElementById('pravachan-list');
+  const query  = (document.getElementById('pravachan-search')?.value || '').toLowerCase().trim();
+  const favs   = getFavs();
+  list.innerHTML = '';
+
+  // Helper: build a card for a pravachan in pravachans[]
+  function buildCard(i, p) {
+    const safeId = 'pc-' + (p.filename || i).replace(/[^a-zA-Z0-9]/g, '_');
+    const cached = p.blobUrl;
+    const fav    = p.filename ? isFav(p.filename) : false;
+    const icon   = p.icon || (p.isRemote ? getRemoteIcon(p.filename) : '🎙️');
+    const div    = document.createElement('div');
+    div.className = 'pravachan-card' + (i === currentTrack ? ' active' : '') + (p.isRemote ? ' remote' : '');
+    div.id = safeId;
+    div.onclick = () => selectTrack(i);
+    div.innerHTML = `
+      <div class="pc-header">
+        <div class="pc-icon">${icon}</div>
+        <div class="pc-info">
+          <div class="pc-title">${currentLang === 'hi' ? p.titleHi : p.titleEn}</div>
+          <div class="pc-subtitle">${currentLang === 'hi' ? p.subtitleHi : p.subtitleEn}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <button class="fav-btn${fav ? ' fav-on' : ''}" onclick="event.stopPropagation(); toggleFav('${p.filename}'); renderPravachanList();" title="पसंदीदा">
+              ${fav ? '★' : '☆'}
+            </button>
+            ${cached
+              ? `<span style="font-size:3.5vw;color:var(--gold);">✓</span>`
+              : `<button class="dl-btn" onclick="event.stopPropagation(); cacheBuiltIn(${i}, document.getElementById('${safeId}'))">⬇</button>`
+            }
+          </div>
+          <div class="pc-duration">${p.duration}</div>
+        </div>
+      </div>
+    `;
+    return div;
+  }
+
+  // Helper: build a pending remote card (stream on tap, download to save)
+  function buildPendingCard(track) {
+    const safeId    = 'rc-' + track.filename.replace(/[^a-zA-Z0-9]/g, '_');
+    const streamSrc = MP3_BASE_URL + encodeURIComponent(track.filename) + '?download=true';
+    const fav       = isFav(track.filename);
+    const icon      = getRemoteIcon(track.filename);
+    const div       = document.createElement('div');
+    div.className   = 'pravachan-card remote';
+    div.id = safeId;
+    div.onclick = () => {
+      let idx = pravachans.findIndex(p => p.filename === track.filename);
+      if (idx === -1) {
+        pravachans.push({
+          titleHi: track.titleHi, titleEn: track.titleEn,
+          subtitleHi: track.subtitleHi, subtitleEn: track.subtitleEn,
+          duration: '—:——', src: streamSrc, icon,
+          isRemote: true, filename: track.filename
+        });
+        idx = pravachans.length - 1;
+      }
+      selectTrack(idx);
+      renderPravachanList();
+    };
+    div.innerHTML = `
+      <div class="pc-header">
+        <div class="pc-icon">${icon}</div>
+        <div class="pc-info">
+          <div class="pc-title">${currentLang === 'hi' ? track.titleHi : track.titleEn}</div>
+          <div class="pc-subtitle">${currentLang === 'hi' ? track.subtitleHi : track.subtitleEn}</div>
+          <div style="font-size:2.6vw;color:var(--saffron);font-family:'EB Garamond',serif;margin-top:3px;">● नया प्रवचन</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <button class="fav-btn${fav ? ' fav-on' : ''}" onclick="event.stopPropagation(); toggleFav('${track.filename}'); renderPravachanList();" title="पसंदीदा">
+              ${fav ? '★' : '☆'}
+            </button>
+            <button class="dl-btn" onclick="event.stopPropagation(); downloadAndPlay('${track.filename}', document.getElementById('${safeId}'), false)">⬇</button>
+          </div>
+        </div>
+      </div>
+    `;
+    return div;
+  }
+
+  // Filter helper
+  function matchesSearch(titleHi, titleEn, subtitleHi, subtitleEn) {
+    if (!query) return true;
+    return [titleHi, titleEn, subtitleHi, subtitleEn].some(s => s && s.toLowerCase().includes(query));
+  }
+
+  // ── 1. Favorites first (from pravachans[]) ──────────────────
+  const favCards   = [];
+  const normalCards = [];
+  pravachans.forEach((p, i) => {
+    if (!matchesSearch(p.titleHi, p.titleEn, p.subtitleHi, p.subtitleEn)) return;
+    if (p.filename && isFav(p.filename)) favCards.push(buildCard(i, p));
+    else normalCards.push(buildCard(i, p));
+  });
+
+  // ── 2. Pending remote tracks (also split by fav) ────────────
+  const pending = remotePravachans.filter(t => !isAlreadyInPlayer(t.filename));
+  const favPending    = [];
+  const normalPending = [];
+  pending.forEach(track => {
+    if (!matchesSearch(track.titleHi, track.titleEn, track.subtitleHi, track.subtitleEn)) return;
+    if (isFav(track.filename)) favPending.push(buildPendingCard(track));
+    else normalPending.push(buildPendingCard(track));
+  });
+
+  // ── Render: favs → normal → pending ────────────────────────
+  if (favCards.length > 0 || favPending.length > 0) {
+    const favLabel = document.createElement('div');
+    favLabel.style.cssText = 'font-family:"Yatra One",cursive;font-size:3vw;color:var(--gold);padding:6px 4px 2px;opacity:0.7;';
+    favLabel.textContent = '★ पसंदीदा';
+    list.appendChild(favLabel);
+    [...favCards, ...favPending].forEach(c => list.appendChild(c));
+
+    if (normalCards.length > 0 || normalPending.length > 0) {
+      const sep = document.createElement('div');
+      sep.style.cssText = 'height:1px;background:rgba(212,168,85,0.15);margin:8px 4px;';
+      list.appendChild(sep);
+    }
+  }
+  [...normalCards, ...normalPending].forEach(c => list.appendChild(c));
+}
+
+
+// ── Player action buttons (fav + download on the player itself) ──────────────
+function updatePlayerButtons() {
+  const favBtn = document.getElementById('player-fav-btn');
+  const dlBtn  = document.getElementById('player-dl-btn');
+  if (!favBtn || !dlBtn) return;
+
+  if (currentTrack < 0 || currentTrack >= pravachans.length) {
+    favBtn.style.visibility = 'hidden';
+    dlBtn.style.visibility  = 'hidden';
+    return;
+  }
+  favBtn.style.visibility = 'visible';
+  dlBtn.style.visibility  = 'visible';
+
+  const p   = pravachans[currentTrack];
+  const fav = p.filename ? isFav(p.filename) : false;
+
+  // Fav button
+  favBtn.textContent = fav ? '★' : '☆';
+  favBtn.classList.toggle('active', fav);
+
+  // Download button — ✓ if cached, ⬇ otherwise
+  if (p.blobUrl) {
+    dlBtn.textContent = '✓';
+    dlBtn.classList.add('cached');
+    dlBtn.disabled = true;
+  } else {
+    dlBtn.textContent = '⬇';
+    dlBtn.classList.remove('cached');
+    dlBtn.disabled = false;
+  }
+}
+
+function togglePlayerFav() {
+  if (currentTrack < 0) return;
+  const p = pravachans[currentTrack];
+  if (!p.filename) return;
+  toggleFav(p.filename);
+  updatePlayerButtons();
+  renderPravachanList();
+}
+
+async function downloadCurrentTrack() {
+  if (currentTrack < 0) return;
+  const p     = pravachans[currentTrack];
+  const dlBtn = document.getElementById('player-dl-btn');
+  if (!p.filename || p.blobUrl) return; // already cached
+
+  dlBtn.textContent = '⏳';
+  dlBtn.disabled    = true;
+
+  try {
+    const res = await fetch(p.src);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const blob   = await res.blob();
+    await dbSave(p.filename, blob);
+    const blobUrl = URL.createObjectURL(blob);
+    p.blobUrl = blobUrl;
+    p.src     = blobUrl;
+    preloadDurationsFor([p]);
+    updatePlayerButtons();
+    renderPravachanList();
+  } catch(e) {
+    dlBtn.textContent = '✗';
+    dlBtn.disabled    = false;
+    console.error('Player download failed:', e);
+  }
+}
+
+
+function selectTrack(index) {
+  currentTrack = index;
+  const p = pravachans[index];
+  audioEl.src = p.src;
+  audioEl.load();
+
+  document.getElementById('player-now-playing').textContent = currentLang === 'hi' ? p.titleHi : p.titleEn;
+  document.getElementById('audio-player').classList.add('visible');
+  renderPravachanList();
+  updatePlayerButtons();
+
+  // Reset progress
+  document.getElementById('progress-bar').style.width = '0%';
+  document.getElementById('time-current').textContent = '0:00';
+  document.getElementById('time-total').textContent = p.duration;
+
+  playAudio();
+}
+
+function playAudio() {
+  audioEl.play().then(() => {
+    isPlaying = true;
+    document.getElementById('play-btn').textContent = '⏸';
+    document.getElementById('waveform').classList.add('playing');
+  }).catch(e => {
+    // Autoplay blocked — show play button
+    isPlaying = false;
+  });
+}
+
+function togglePlay() {
+  if (!audioEl.src || currentTrack < 0) return;
+  if (isPlaying) {
+    audioEl.pause();
+    isPlaying = false;
+    document.getElementById('play-btn').textContent = '▶️';
+    document.getElementById('waveform').classList.remove('playing');
+  } else {
+    playAudio();
+  }
+}
+
+function prevTrack() {
+  if (currentTrack > 0) selectTrack(currentTrack - 1);
+}
+
+function nextTrack() {
+  if (currentTrack < pravachans.length - 1) selectTrack(currentTrack + 1);
+}
+
+function seekAudio(e) {
+  if (!audioEl.duration) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const ratio = (e.clientX - rect.left) / rect.width;
+  audioEl.currentTime = ratio * audioEl.duration;
+}
+
+audioEl.addEventListener('loadedmetadata', () => {
+  const dur = formatTime(audioEl.duration);
+  document.getElementById('time-total').textContent = dur;
+  if (currentTrack >= 0) {
+    const p = pravachans[currentTrack];
+    p.duration = dur;
+    p.durationLoaded = true;
+    // Find card by id — safe with favorites reordering
+    const safeId = 'pc-' + (p.filename || currentTrack).toString().replace(/[^a-zA-Z0-9]/g, '_');
+    const card = document.getElementById(safeId);
+    if (card) {
+      const badge = card.querySelector('.pc-duration');
+      if (badge) badge.textContent = dur;
+    }
+    // Restore saved position if resuming this track
+    const savedTrack = parseInt(localStorage.getItem('pj_track'));
+    const savedTime  = parseInt(localStorage.getItem('pj_time'));
+    if (savedTrack === currentTrack && savedTime > 0 && savedTime < audioEl.duration - 5) {
+      audioEl.currentTime = savedTime;
+    }
+  }
+});
+
+audioEl.addEventListener('timeupdate', () => {
+  if (!audioEl.duration) return;
+  const pct = (audioEl.currentTime / audioEl.duration) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('time-current').textContent = formatTime(audioEl.currentTime);
+  // Save position every ~5 seconds
+  if (Math.floor(audioEl.currentTime) % 5 === 0) {
+    localStorage.setItem('pj_track', currentTrack);
+    localStorage.setItem('pj_time', Math.floor(audioEl.currentTime));
+  }
+});
+
+audioEl.addEventListener('ended', () => {
+  isPlaying = false;
+  document.getElementById('play-btn').textContent = '▶️';
+  document.getElementById('waveform').classList.remove('playing');
+  localStorage.removeItem('pj_time'); // clear position — track finished
+  if (currentTrack < pravachans.length - 1) nextTrack();
+});
+
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+// Preload real durations from all MP3 files — updates cards automatically
+function preloadDurationsFor(tracks) {
+  tracks.forEach(p => {
+    if (!p.src || p.durationLoaded) return; // skip if metadata already fetched this session
+    const a = new Audio();
+    a.preload = 'metadata';
+    a.src = p.src;
+    a.addEventListener('loadedmetadata', () => {
+      p.duration = formatTime(a.duration);
+      p.durationLoaded = true;
+      // Find card by filename-based id — safe even when favorites reorder cards
+      const safeId = 'pc-' + (p.filename || '').replace(/[^a-zA-Z0-9]/g, '_');
+      const card = document.getElementById(safeId);
+      if (card) {
+        const badge = card.querySelector('.pc-duration');
+        if (badge) badge.textContent = p.duration;
+      }
+      a.src = '';
+    });
+  });
+}
+// Restore downloaded pravachans from IndexedDB on startup
+// (preloadDurationsFor is called inside restoreDownloadedTracks after blobs are ready)
+restoreDownloadedTracks();
+
+
+// Silent auto-fetch remote pravachans on load (if online)
+setTimeout(() => {
+  if (navigator.onLine) fetchRemotePravachans(true);
+}, 2500);
+
+// Build waveform bars
+function buildWaveform() {
+  const wf = document.getElementById('waveform');
+  wf.innerHTML = '';
+  for (let i = 0; i < 28; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'wave-bar';
+    const h = 4 + Math.random() * 22;
+    bar.style.setProperty('--h', h + 'px');
+    bar.style.animationDelay = (i * 0.07) + 's';
+    wf.appendChild(bar);
+  }
+}
+
+buildWaveform();
+renderPravachanList();
+
+// Resume last played track on app launch
+function restoreLastSession() {
+  const savedTrack = parseInt(localStorage.getItem('pj_track'));
+  const savedTime  = parseInt(localStorage.getItem('pj_time'));
+  if (!isNaN(savedTrack) && savedTrack >= 0 && savedTrack < pravachans.length) {
+    switchSection('pravachan');
+    currentTrack = savedTrack;
+    const p = pravachans[savedTrack];
+    audioEl.src = p.src; // now guaranteed to be blob URL if downloaded
+    audioEl.load();
+    document.getElementById('player-now-playing').textContent = p.titleHi;
+    document.getElementById('audio-player').classList.add('visible');
+    document.getElementById('progress-bar').style.width = '0%';
+    document.getElementById('time-current').textContent = savedTime > 0 ? formatTime(savedTime) : '0:00';
+    document.getElementById('time-total').textContent = p.duration;
+    renderPravachanList();
+    updatePlayerButtons();
+    isPlaying = false;
+    document.getElementById('play-btn').textContent = '▶️';
+  }
+}
+
+// ============================================================
+// BHAGAVAD GITA — CONTENT
+// ============================================================
+const gitaChapters = [
+  {
+    numHi: 'प्रथम अध्याय', numEn: 'Chapter One',
+    titleHi: 'अर्जुन विषाद योग', titleEn: 'Arjuna Vishada Yoga',
+    subtitleHi: 'अर्जुन का विषाद', subtitleEn: 'The Yoga of Arjuna\'s Despondency',
+    verses: [
+      { numHi: '।।१।।', numEn: '1.1',
+        hi: 'धृतराष्ट्र उवाच।\nधर्मक्षेत्रे कुरुक्षेत्रे समवेता युयुत्सवः।\nमामकाः पाण्डवाश्चैव किमकुर्वत सञ्जय।।',
+        hiTrans: 'धृतराष्ट्र बोले — हे संजय! धर्मभूमि कुरुक्षेत्र में एकत्रित होकर युद्ध की इच्छा रखने वाले मेरे और पाण्डु के पुत्रों ने क्या किया?',
+        en: 'Dhritarashtra said: O Sanjaya, after my sons and the sons of Pandu assembled in the place of pilgrimage at Kurukshetra, desiring to fight, what did they do?' },
+      { numHi: '।।२।।', numEn: '1.2',
+        hi: 'सञ्जय उवाच।\nदृष्ट्वा तु पाण्डवानीकं व्यूढं दुर्योधनस्तदा।\nआचार्यमुपसङ्गम्य राजा वचनमब्रवीत्।।',
+        hiTrans: 'संजय बोले — उस समय राजा दुर्योधन ने पाण्डवों की सेना को व्यूह बद्ध देखकर द्रोणाचार्य के पास जाकर यह वचन कहे।',
+        en: 'Sanjaya said: O King, after looking over the army arranged in military formation by the sons of Pandu, King Duryodhana went to his teacher and spoke the following words.' },
+      { numHi: '।।२०।।', numEn: '1.20',
+        hi: 'अथ व्यवस्थितान्दृष्ट्वा धार्तराष्ट्रान् कपिध्वजः।\nप्रवृत्ते शस्त्रसम्पाते धनुरुद्यम्य पाण्डवः।।\nहृषीकेशं तदा वाक्यमिदमाह महीपते।।',
+        hiTrans: 'हे राजन! तब हनुमान ध्वजा वाले अर्जुन ने शस्त्र चलने के समय धृतराष्ट्र के पुत्रों को मोर्चा बाँधे देखकर धनुष उठाया और श्रीकृष्ण से यह वचन बोले।',
+        en: 'O King, at that time Arjuna, the son of Pandu, who was seated in the chariot bearing the flag marked with Hanuman, took up his bow and prepared to shoot his arrows.' },
+    ]
+  },
+  {
+    numHi: 'द्वितीय अध्याय', numEn: 'Chapter Two',
+    titleHi: 'सांख्य योग', titleEn: 'Sankhya Yoga',
+    subtitleHi: 'ज्ञान का योग', subtitleEn: 'The Yoga of Knowledge',
+    verses: [
+      { numHi: '।।११।।', numEn: '2.11',
+        hi: 'श्रीभगवानुवाच।\nअशोच्यानन्वशोचस्त्वं प्रज्ञावादांश्च भाषसे।\nगतासूनगतासूंश्च नानुशोचन्ति पण्डिताः।।',
+        hiTrans: 'श्री भगवान बोले — तू उनके लिए शोक करता है जो शोक के योग्य नहीं हैं, फिर भी ज्ञान की बातें करता है। जो पण्डित (ज्ञानी) होते हैं, वे न मरे हुए के लिए और न जीवित के लिए शोक करते हैं।',
+        en: 'The Supreme Personality of Godhead said: While speaking learned words, you are mourning for what is not worthy of grief. Those who are wise lament neither for the living nor for the dead.' },
+      { numHi: '।।१३।।', numEn: '2.13',
+        hi: 'देहिनोऽस्मिन्यथा देहे कौमारं यौवनं जरा।\nतथा देहान्तरप्राप्तिर्धीरस्तत्र न मुह्यति।।',
+        hiTrans: 'जैसे इस शरीर में आत्मा के बालपन, युवावस्था और वृद्धावस्था होती है, वैसे ही मृत्यु के बाद आत्मा दूसरे शरीर को प्राप्त होती है। धीर पुरुष इससे मोहित नहीं होता।',
+        en: 'As the embodied soul continuously passes, in this body, from boyhood to youth to old age, the soul similarly passes into another body at death. A sober person is not bewildered by such a change.' },
+      { numHi: '।।४७।।', numEn: '2.47',
+        hi: 'कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।\nमा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि।।',
+        hiTrans: 'तेरा कर्म करने में ही अधिकार है, फलों में कभी नहीं। इसलिए तू कर्मफल का हेतु मत बन और कर्म न करने में भी तेरी आसक्ति न हो।',
+        en: 'You have a right to perform your prescribed duty, but you are not entitled to the fruits of action. Never consider yourself the cause of the results of your activities, and never be attached to not doing your duty.' },
+    ]
+  },
+  {
+    numHi: 'तृतीय अध्याय', numEn: 'Chapter Three',
+    titleHi: 'कर्म योग', titleEn: 'Karma Yoga',
+    subtitleHi: 'कर्म का विज्ञान', subtitleEn: 'The Science of Action',
+    verses: [
+      { numHi: '।।३।।', numEn: '3.3',
+        hi: 'श्रीभगवानुवाच।\nलोकेऽस्मिन्द्विविधा निष्ठा पुरा प्रोक्ता मयानघ।\nज्ञानयोगेन साङ्ख्यानां कर्मयोगेन योगिनाम्।।',
+        hiTrans: 'श्री भगवान बोले — हे निष्पाप अर्जुन! इस लोक में दो प्रकार की निष्ठा मेरे द्वारा पहले कही गई है — ज्ञानयोगियों के लिए ज्ञान-योग और योगियों के लिए कर्म-योग।',
+        en: 'The Supreme Personality of Godhead said: O sinless Arjuna, I have already explained that there are two classes of men who try to realize the self. Some are inclined to understand it by empirical, philosophical speculation, and others are inclined to understand it by devotional work.' },
+      { numHi: '।।१९।।', numEn: '3.19',
+        hi: 'तस्मादसक्तः सततं कार्यं कर्म समाचर।\nअसक्तो ह्याचरन्कर्म परमाप्नोति पूरुषः।।',
+        hiTrans: 'इसलिए तू सदा आसक्ति रहित होकर कर्तव्य कर्म को भलीभाँति करता रह, क्योंकि आसक्ति रहित होकर कर्म करने वाला मनुष्य परमात्मा को प्राप्त होता है।',
+        en: 'Therefore, without being attached to the fruits of activities, one should act as a matter of duty; for by working without attachment, one attains the Supreme.' },
+    ]
+  },
+  {
+    numHi: 'चतुर्थ अध्याय', numEn: 'Chapter Four',
+    titleHi: 'ज्ञान कर्म संन्यास योग', titleEn: 'Jnana Karma Sanyasa Yoga',
+    subtitleHi: 'दिव्य ज्ञान', subtitleEn: 'The Yoga of Renunciation of Action in Knowledge',
+    verses: [
+      { numHi: '।।७।।', numEn: '4.7',
+        hi: 'यदा यदा हि धर्मस्य ग्लानिर्भवति भारत।\nअभ्युत्थानमधर्मस्य तदात्मानं सृजाम्यहम्।।',
+        hiTrans: 'हे भारत! जब-जब धर्म की हानि और अधर्म की वृद्धि होती है, तब-तब मैं स्वयं को प्रकट करता हूँ।',
+        en: 'Whenever and wherever there is a decline in religious practice, O descendant of Bharata, and a predominant rise of irreligion – at that time I descend Myself.' },
+      { numHi: '।।८।।', numEn: '4.8',
+        hi: 'परित्राणाय साधूनां विनाशाय च दुष्कृताम्।\nधर्मसंस्थापनार्थाय सम्भवामि युगे युगे।।',
+        hiTrans: 'साधुओं की रक्षा के लिए, दुष्टों के विनाश के लिए और धर्म की स्थापना के लिए मैं युग-युग में प्रकट होता हूँ।',
+        en: 'To deliver the pious and to annihilate the miscreants, as well as to reestablish the principles of religion, I Myself appear, millennium after millennium.' },
+    ]
+  },
+  {
+    numHi: 'पञ्चम अध्याय', numEn: 'Chapter Five',
+    titleHi: 'कर्म संन्यास योग', titleEn: 'Karma Sanyasa Yoga',
+    subtitleHi: 'कर्म और संन्यास', subtitleEn: 'The Yoga of Renunciation',
+    verses: [
+      { numHi: '।।१०।।', numEn: '5.10',
+        hi: 'ब्रह्मण्याधाय कर्माणि सङ्गं त्यक्त्वा करोति यः।\nलिप्यते न स पापेन पद्मपत्रमिवाम्भसा।।',
+        hiTrans: 'जो मनुष्य सब कर्मों को परमात्मा को अर्पण करके आसक्ति छोड़कर कर्म करता है, वह पाप से उसी प्रकार लिप्त नहीं होता जैसे कमल का पत्ता जल से अलिप्त रहता है।',
+        en: 'One who performs his duty without attachment, surrendering the results unto the Supreme Lord, is unaffected by sinful action, as the lotus leaf is untouched by water.' },
+    ]
+  },
+  {
+    numHi: 'षष्ठ अध्याय', numEn: 'Chapter Six',
+    titleHi: 'ध्यान योग', titleEn: 'Dhyana Yoga',
+    subtitleHi: 'आत्म-संयम का योग', subtitleEn: 'The Yoga of Meditation',
+    verses: [
+      { numHi: '।।५।।', numEn: '6.5',
+        hi: 'उद्धरेदात्मनात्मानं नात्मानमवसादयेत्।\nआत्मैव ह्यात्मनो बन्धुरात्मैव रिपुरात्मनः।।',
+        hiTrans: 'मनुष्य को चाहिए कि वह अपने मन के द्वारा अपना उद्धार करे और अपने को अधोगति में न डाले। यह मन ही मनुष्य का मित्र है और यही उसका शत्रु भी है।',
+        en: 'One must deliver himself with the help of his mind, and not degrade himself. The mind is the friend of the conditioned soul, and his enemy as well.' },
+    ]
+  },
+  {
+    numHi: 'सप्तम अध्याय', numEn: 'Chapter Seven',
+    titleHi: 'ज्ञान विज्ञान योग', titleEn: 'Jnana Vijnana Yoga',
+    subtitleHi: 'परमात्मा का ज्ञान', subtitleEn: 'Knowledge of the Absolute',
+    verses: [
+      { numHi: '।।७।।', numEn: '7.7',
+        hi: 'मत्तः परतरं नान्यत्किञ्चिदस्ति धनञ्जय।\nमयि सर्वमिदं प्रोतं सूत्रे मणिगणा इव।।',
+        hiTrans: 'हे धनञ्जय! मुझसे परे और श्रेष्ठ दूसरा कुछ भी नहीं है। यह सम्पूर्ण जगत मुझमें इस प्रकार पिरोया हुआ है जैसे धागे में मणियाँ।',
+        en: 'O conqueror of wealth, there is no truth superior to Me. Everything rests upon Me, as pearls are strung on a thread.' },
+    ]
+  },
+  {
+    numHi: 'अष्टम अध्याय', numEn: 'Chapter Eight',
+    titleHi: 'अक्षर ब्रह्म योग', titleEn: 'Aksara Brahma Yoga',
+    subtitleHi: 'ईश्वर की प्राप्ति', subtitleEn: 'Attaining the Supreme',
+    verses: [
+      { numHi: '।।७।।', numEn: '8.7',
+        hi: 'तस्मात्सर्वेषु कालेषु मामनुस्मर युध्य च।\nमय्यर्पितमनोबुद्धिर्मामेवैष्यस्यसंशयः।।',
+        hiTrans: 'इसलिए तू सब समय मेरा स्मरण कर और युद्ध भी कर। मुझमें मन और बुद्धि अर्पण करके तू नि:संदेह मुझे ही प्राप्त होगा।',
+        en: 'Therefore, Arjuna, you should always think of Me in the form of Krishna and at the same time carry out your prescribed duty of fighting. With your activities dedicated to Me and your mind and intelligence fixed on Me, you will attain Me without doubt.' },
+    ]
+  },
+  {
+    numHi: 'नवम अध्याय', numEn: 'Chapter Nine',
+    titleHi: 'राज विद्या राज गुह्य योग', titleEn: 'Raja Vidya Raja Guhya Yoga',
+    subtitleHi: 'सर्वोच्च ज्ञान', subtitleEn: 'The Most Confidential Knowledge',
+    verses: [
+      { numHi: '।।२७।।', numEn: '9.27',
+        hi: 'यत्करोषि यदश्नासि यज्जुहोषि ददासि यत्।\nयत्तपस्यसि कौन्तेय तत्कुरुष्व मदर्पणम्।।',
+        hiTrans: 'हे कुन्तीपुत्र! तू जो कुछ करता है, जो खाता है, जो हवन करता है, जो दान देता है और जो तप करता है — वह सब मुझे अर्पण कर।',
+        en: 'Whatever you do, whatever you eat, whatever you offer or give away, and whatever austerities you perform – do that, O son of Kunti, as an offering to Me.' },
+    ]
+  },
+  {
+    numHi: 'दशम अध्याय', numEn: 'Chapter Ten',
+    titleHi: 'विभूति योग', titleEn: 'Vibhuti Yoga',
+    subtitleHi: 'ईश्वर की विभूतियाँ', subtitleEn: 'The Opulences of the Absolute',
+    verses: [
+      { numHi: '।।२०।।', numEn: '10.20',
+        hi: 'अहमात्मा गुडाकेश सर्वभूताशयस्थितः।\nअहमादिश्च मध्यं च भूतानामन्त एव च।।',
+        hiTrans: 'हे गुडाकेश! मैं सभी प्राणियों के हृदय में स्थित आत्मा हूँ। मैं ही सभी प्राणियों का आदि, मध्य और अन्त हूँ।',
+        en: 'I am the Supersoul, O Arjuna, seated in the hearts of all living entities. I am the beginning, the middle and the end of all beings.' },
+    ]
+  },
+  {
+    numHi: 'एकादश अध्याय', numEn: 'Chapter Eleven',
+    titleHi: 'विश्वरूप दर्शन योग', titleEn: 'Vishvarupa Darsana Yoga',
+    subtitleHi: 'विराट रूप का दर्शन', subtitleEn: 'The Vision of the Universal Form',
+    verses: [
+      { numHi: '।।३३।।', numEn: '11.33',
+        hi: 'तस्मात्त्वमुत्तिष्ठ यशो लभस्व\nजित्वा शत्रून् भुङ्क्ष्व राज्यं समृद्धम्।\nमयैवैते निहताः पूर्वमेव\nनिमित्तमात्रं भव सव्यसाचिन्।।',
+        hiTrans: 'इसलिए उठ और यश प्राप्त कर। शत्रुओं को जीतकर समृद्ध राज्य का भोग कर। ये सब मेरे द्वारा पहले ही मारे जा चुके हैं — हे सव्यसाची! तू तो केवल निमित्त मात्र बन।',
+        en: 'Therefore get up. Prepare to fight and win glory. Conquer your enemies and enjoy a flourishing kingdom. They are already put to death by My arrangement, and you, O Arjuna, can be but an instrument in the fight.' },
+    ]
+  },
+  {
+    numHi: 'द्वादश अध्याय', numEn: 'Chapter Twelve',
+    titleHi: 'भक्ति योग', titleEn: 'Bhakti Yoga',
+    subtitleHi: 'भक्ति का मार्ग', subtitleEn: 'The Path of Devotional Service',
+    verses: [
+      { numHi: '।।६-७।।', numEn: '12.6-7',
+        hi: 'ये तु सर्वाणि कर्माणि मयि संन्यस्य मत्पराः।\nअनन्येनैव योगेन मां ध्यायन्त उपासते।।\nतेषामहं समुद्धर्ता मृत्युसंसारसागरात्।\nभवामि नचिरात्पार्थ मय्यावेशितचेतसाम्।।',
+        hiTrans: 'परन्तु जो लोग सभी कर्म मुझे अर्पण करके, मेरे परायण होकर, अनन्य भक्तियोग से मेरा ध्यान करते हैं — हे पार्थ! उनका मृत्यु रूपी संसार सागर से मैं शीघ्र उद्धार करने वाला हूँ।',
+        en: 'But those who worship Me with devotion, meditating on My transcendental form – to them, O son of Pritha, I carry what they lack, and I preserve what they have.' },
+    ]
+  },
+  {
+    numHi: 'त्रयोदश अध्याय', numEn: 'Chapter Thirteen',
+    titleHi: 'क्षेत्र-क्षेत्रज्ञ विभाग योग', titleEn: 'Ksetra Ksetrajna Vibhaga Yoga',
+    subtitleHi: 'प्रकृति और पुरुष', subtitleEn: 'Nature, the Enjoyer and Consciousness',
+    verses: [
+      { numHi: '।।२।।', numEn: '13.2',
+        hi: 'क्षेत्रज्ञं चापि मां विद्धि सर्वक्षेत्रेषु भारत।\nक्षेत्रक्षेत्रज्ञयोर्ज्ञानं यत्तज्ज्ञानं मतं मम।।',
+        hiTrans: 'हे भारत! तू मुझे भी सभी क्षेत्रों (शरीरों) में क्षेत्रज्ञ (आत्मा) जान। क्षेत्र और क्षेत्रज्ञ का जो ज्ञान है — वही मेरे मत में सच्चा ज्ञान है।',
+        en: 'O scion of Bharata, you should understand that I am also the knower in all bodies, and to understand this body and its knower is called knowledge. That is My opinion.' },
+    ]
+  },
+  {
+    numHi: 'चतुर्दश अध्याय', numEn: 'Chapter Fourteen',
+    titleHi: 'गुणत्रय विभाग योग', titleEn: 'Gunatraya Vibhaga Yoga',
+    subtitleHi: 'प्रकृति के तीन गुण', subtitleEn: 'The Three Modes of Material Nature',
+    verses: [
+      { numHi: '।।५।।', numEn: '14.5',
+        hi: 'सत्त्वं रजस्तम इति गुणाः प्रकृतिसम्भवाः।\nनिबध्नन्ति महाबाहो देहे देहिनमव्ययम्।।',
+        hiTrans: 'हे महाबाहो! सत्त्व, रज और तम — ये प्रकृति से उत्पन्न तीन गुण हैं। ये अविनाशी आत्मा को देह में बाँधते हैं।',
+        en: 'Material nature consists of three modes – goodness, passion and ignorance. When the eternal living entity comes in contact with nature, O mighty-armed Arjuna, he becomes conditioned by these modes.' },
+    ]
+  },
+  {
+    numHi: 'पञ्चदश अध्याय', numEn: 'Chapter Fifteen',
+    titleHi: 'पुरुषोत्तम योग', titleEn: 'Purushottama Yoga',
+    subtitleHi: 'परम पुरुष का ज्ञान', subtitleEn: 'The Yoga of the Supreme Person',
+    verses: [
+      { numHi: '।।१५।।', numEn: '15.15',
+        hi: 'सर्वस्य चाहं हृदि सन्निविष्टो\nमत्तः स्मृतिर्ज्ञानमपोहनं च।\nवेदैश्च सर्वैरहमेव वेद्यो\nवेदान्तकृद्वेदविदेव चाहम्।।',
+        hiTrans: 'मैं सभी प्राणियों के हृदय में अन्तर्यामी रूप से स्थित हूँ। स्मृति, ज्ञान और अपोहन (भूलना) मुझसे ही होते हैं। सभी वेदों द्वारा मैं ही जानने योग्य हूँ। वेदान्त का कर्ता और वेदों का जानने वाला भी मैं ही हूँ।',
+        en: 'I am seated in everyone\'s heart, and from Me come remembrance, knowledge and forgetfulness. By all the Vedas, I am to be known. Indeed, I am the compiler of Vedanta, and I am the knower of the Vedas.' },
+    ]
+  },
+  {
+    numHi: 'षोडश अध्याय', numEn: 'Chapter Sixteen',
+    titleHi: 'दैवासुर सम्पद् विभाग योग', titleEn: 'Daivasura Sampad Vibhaga Yoga',
+    subtitleHi: 'दिव्य और आसुरी प्रकृति', subtitleEn: 'The Divine and Demoniac Natures',
+    verses: [
+      { numHi: '।।१-३।।', numEn: '16.1-3',
+        hi: 'अभयं सत्त्वसंशुद्धिर्ज्ञानयोगव्यवस्थितिः।\nदानं दमश्च यज्ञश्च स्वाध्यायस्तप आर्जवम्।।\nअहिंसा सत्यमक्रोधस्त्यागः शान्तिरपैशुनम्।\nदया भूतेष्वलोलुप्त्वं मार्दवं ह्रीरचापलम्।।\nतेजः क्षमा धृतिः शौचमद्रोहो नातिमानिता।\nभवन्ति सम्पदं दैवीमभिजातस्य भारत।।',
+        hiTrans: 'हे भारत! निर्भयता, अन्तःकरण की शुद्धि, ज्ञान में स्थिति, दान, इन्द्रिय-दमन, यज्ञ, स्वाध्याय, तप, सरलता, अहिंसा, सत्य, अक्रोध, त्याग, शान्ति, चुगली न करना, सभी प्राणियों पर दया, लोभहीनता, कोमलता, लज्जा, चपलता का अभाव, तेज, क्षमा, धैर्य, शुद्धता, द्रोहरहितता और अभिमानहीनता — ये दैवी सम्पदा को लेकर उत्पन्न हुए पुरुष के लक्षण हैं।',
+        en: 'Fearlessness; purification of one\'s existence; cultivation of spiritual knowledge; charity; self-control; performance of sacrifice; study of the Vedas; austerity; simplicity; nonviolence; truthfulness; freedom from anger; renunciation; tranquility; aversion to fault-finding; compassion toward all living entities; freedom from covetousness; gentleness; modesty; steady determination – these transcendental qualities belong to godly men endowed with divine nature, O son of Bharata.' },
+    ]
+  },
+  {
+    numHi: 'सप्तदश अध्याय', numEn: 'Chapter Seventeen',
+    titleHi: 'श्रद्धात्रय विभाग योग', titleEn: 'Shraddhatraya Vibhaga Yoga',
+    subtitleHi: 'श्रद्धा के तीन प्रकार', subtitleEn: 'The Divisions of Faith',
+    verses: [
+      { numHi: '।।३।।', numEn: '17.3',
+        hi: 'सत्त्वानुरूपा सर्वस्य श्रद्धा भवति भारत।\nश्रद्धामयोऽयं पुरुषो यो यच्छ्रद्धः स एव सः।।',
+        hiTrans: 'हे भारत! सभी मनुष्यों की श्रद्धा उनके स्वभाव के अनुसार होती है। यह मनुष्य श्रद्धामय है — जैसी जिसकी श्रद्धा है, वह वैसा ही है।',
+        en: 'O son of Bharata, according to one\'s existence under the various modes of nature, one evolves a particular kind of faith. The living being is said to be of a particular faith according to the modes he has acquired.' },
+    ]
+  },
+  {
+    numHi: 'अष्टादश अध्याय', numEn: 'Chapter Eighteen',
+    titleHi: 'मोक्ष संन्यास योग', titleEn: 'Moksha Sanyasa Yoga',
+    subtitleHi: 'मुक्ति का मार्ग', subtitleEn: 'The Yoga of Liberation by Renunciation',
+    verses: [
+      { numHi: '।।६६।।', numEn: '18.66',
+        hi: 'सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज।\nअहं त्वा सर्वपापेभ्यो मोक्षयिष्यामि मा शुचः।।',
+        hiTrans: 'सभी धर्मों को छोड़कर केवल मेरी शरण में आ जा। मैं तुझे सभी पापों से मुक्त कर दूँगा। तू शोक मत कर।',
+        en: 'Abandon all varieties of religion and just surrender unto Me. I shall deliver you from all sinful reactions. Do not fear.' },
+      { numHi: '।।७८।।', numEn: '18.78',
+        hi: 'यत्र योगेश्वरः कृष्णो यत्र पार्थो धनुर्धरः।\nतत्र श्रीर्विजयो भूतिर्ध्रुवा नीतिर्मतिर्मम।।',
+        hiTrans: 'जहाँ योगेश्वर श्रीकृष्ण हैं और जहाँ धनुर्धर अर्जुन हैं, वहाँ श्री, विजय, विभूति और अटल नीति है — ऐसा मेरा मत है।',
+        en: 'Wherever there is Krishna, the master of all mystics, and wherever there is Arjuna, the supreme archer, there will also certainly be opulence, victory, extraordinary power, and morality. That is my opinion.' },
+    ]
+  },
+];
+
+// ============================================================
+// GITA READER
+// ============================================================
+let currentChapter = 0;
+
+function getCookieSavedChapter() {
+  const match = document.cookie.match(/gitaChapter=(\d+)/);
+  return match ? parseInt(match[1]) : 0;
+}
+
+function saveCookieChapter(ch) {
+  const expiry = new Date();
+  expiry.setFullYear(expiry.getFullYear() + 1);
+  document.cookie = `gitaChapter=${ch}; expires=${expiry.toUTCString()}; path=/`;
+}
+
+function updateGitaResume() {
+  const saved = getCookieSavedChapter();
+  const t = translations[currentLang];
+  const el = document.getElementById('gita-resume-lbl');
+  if (saved > 0) {
+    el.textContent = t.resumeText + (saved + 1) + t.chapterOf;
+  } else {
+    el.textContent = t.noResume;
+  }
+}
+
+updateGitaResume();
+
+function openGita() {
+  currentChapter = getCookieSavedChapter();
+  const overlay = document.getElementById('pdf-overlay');
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => {
+    overlay.style.transform = 'translateY(0%)';
+  });
+  renderCurrentChapter();
+}
+
+function closeGita() {
+  const overlay = document.getElementById('pdf-overlay');
+  overlay.style.transform = 'translateY(100%)';
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    overlay.style.transform = '';
+  }, 600);
+}
+
+function renderCurrentChapter() {
+  const ch = gitaChapters[currentChapter];
+  const lang = currentLang;
+  const content = document.getElementById('book-pages-content');
+  content.innerHTML = '';
+
+  // Chapter page
+  const chPage = document.createElement('div');
+  chPage.className = 'book-page';
+  chPage.innerHTML = `
+    <div class="page-inner">
+      <div class="page-number">${lang === 'hi' ? 'भगवद् गीता' : 'Bhagavad Gita'} • ${lang === 'hi' ? ch.numHi : ch.numEn}</div>
+      <div class="chapter-heading">${lang === 'hi' ? ch.titleHi : ch.titleEn}</div>
+      <div style="text-align:center; font-family:'EB Garamond',serif; font-size:3.5vw; color:var(--deep-gold); margin-bottom:16px; font-style:italic;">
+        ${lang === 'hi' ? ch.subtitleHi : ch.subtitleEn}
+      </div>
+      <div class="${lang === 'hi' ? 'page-text' : 'page-text-en'}" style="text-align:center; color:#4a2800; font-style:italic; padding: 10px 0;">
+        ${lang === 'hi' ? '।। श्रीकृष्णार्पणमस्तु ।।' : '॥ Om Shri Krishnaaya Namah ॥'}
+      </div>
+    </div>
+  `;
+  content.appendChild(chPage);
+
+  // Verse pages
+  ch.verses.forEach((verse, i) => {
+    const vPage = document.createElement('div');
+    vPage.className = 'book-page';
+    vPage.style.animationDelay = (i * 0.1) + 's';
+    vPage.innerHTML = `
+      <div class="page-inner">
+        <div class="page-number">${lang === 'hi' ? ch.numHi : ch.numEn}</div>
+        <div class="verse-number">${lang === 'hi' ? verse.numHi : verse.numEn}</div>
+        <div class="${lang === 'hi' ? 'page-text' : 'page-text-en'}">${(lang === 'hi' ? verse.hi : verse.en).replace(/\n/g, '<br>')}</div>
+        ${lang === 'hi' && verse.hiTrans ? `
+          <div style="margin-top:14px; padding-top:12px; border-top:1px solid rgba(100,60,20,0.25);">
+            <div style="font-family:'Tiro Devanagari Hindi',serif; font-size:3.8vw; color:#5a3010; line-height:1.7; font-style:italic;">
+              ${verse.hiTrans}
+            </div>
+          </div>` : ''}
+        ${lang === 'en' && verse.hi ? `
+          <div style="margin-top:12px; padding-top:10px; border-top:1px solid rgba(100,60,20,0.2);">
+            <div class="page-text" style="font-size:3.5vw; color:#6b3a1f; opacity:0.7;">${verse.hi.replace(/\n/g, '<br>')}</div>
+          </div>` : ''}
+      </div>
+    `;
+    content.appendChild(vPage);
+  });
+
+  // Update UI
+  const t = translations[lang];
+  document.getElementById('pdf-page-info').textContent = (lang === 'hi' ? 'अ॰ ' : 'Ch. ') + (currentChapter + 1);
+  document.getElementById('pdf-progress').style.width = ((currentChapter + 1) / 18 * 100) + '%';
+  document.getElementById('prev-chapter-btn').disabled = currentChapter === 0;
+  document.getElementById('next-chapter-btn').disabled = currentChapter === 17;
+
+  // Scroll to top
+  document.getElementById('book-scroll').scrollTop = 0;
+
+  // Save position
+  saveCookieChapter(currentChapter);
+  updateGitaResume();
+}
+
+function prevChapter() {
+  if (currentChapter > 0) { currentChapter--; renderCurrentChapter(); }
+}
+
+function nextChapter() {
+  if (currentChapter < 17) { currentChapter++; renderCurrentChapter(); }
+}
+
+function jumpToChapter(e) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const ratio = (e.clientX - rect.left) / rect.width;
+  currentChapter = Math.floor(ratio * 18);
+  currentChapter = Math.max(0, Math.min(17, currentChapter));
+  renderCurrentChapter();
+}
+
+// ============================================================
+// PDF FILE VIEWER  (gita.pdf) — using PDF.js
+// ============================================================
+const GITA_PDF_PATH = 'https://huggingface.co/Prabeenh/premanandji-db/resolve/main/gita.pdf?download=true';
+const GITA_PDF_DB_KEY = 'gita.pdf';
+
+async function downloadGitaPdf() {
+  const btn = document.getElementById('pdf-dl-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳…'; }
+  try {
+    const res = await fetch(GITA_PDF_PATH);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const blob = await res.blob();
+    await dbSave(GITA_PDF_DB_KEY, blob);
+    if (window._gitaPdfBlobUrl) URL.revokeObjectURL(window._gitaPdfBlobUrl);
+    window._gitaPdfBlobUrl = URL.createObjectURL(blob);
+    window._gitaPdfCached  = true;
+    pdfDoc = null; // force reload from new blob on next open
+    updatePdfDlBtn();
+  } catch(e) {
+    if (btn) { btn.textContent = '✗ त्रुटि'; btn.disabled = false; }
+    console.error('PDF download failed:', e);
+  }
+}
+
+async function restoreGitaPdf() {
+  try {
+    const blob = await dbLoad(GITA_PDF_DB_KEY);
+    if (!blob) return;
+    if (window._gitaPdfBlobUrl) URL.revokeObjectURL(window._gitaPdfBlobUrl);
+    window._gitaPdfBlobUrl = URL.createObjectURL(blob);
+    window._gitaPdfCached  = true;
+    updatePdfDlBtn();
+  } catch(e) { /* not cached yet */ }
+}
+function handlePdfCardTap() {
+  if (window._gitaPdfCached || window._gitaPdfBlobUrl) {
+    openGitaPdf();
+  } else {
+    downloadGitaPdf();
+  }
+}
+
+function updatePdfDlBtn() {
+  const btn = document.getElementById('pdf-dl-btn');
+  if (!btn) return;
+  if (window._gitaPdfCached || window._gitaPdfBlobUrl) {
+    btn.textContent = '📖 पढ़ें';
+    btn.disabled = false;
+    btn.style.color = 'var(--gold)';
+  } else {
+    btn.textContent = '⬇ डाउनलोड';
+    btn.disabled = false;
+    btn.style.color = '';
+  }
+}
+
+// Load PDF.js from CDN
+const pdfScript = document.createElement('script');
+pdfScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+document.head.appendChild(pdfScript);
+
+let pdfDoc      = null;
+let pdfLoading  = false;
+let currentPdfPage = 1;
+let totalPdfPages  = 0;
+const PDF_SCALE    = 1.6;
+
+restoreGitaPdf(); // must be called after pdfDoc is declared
+
+function getCookiePdfPage() {
+  const match = document.cookie.match(/gitaPdfPage=(\d+)/);
+  return match ? parseInt(match[1]) : 1;
+}
+
+function saveCookiePdfPage(page) {
+  const exp = new Date();
+  exp.setFullYear(exp.getFullYear() + 1);
+  document.cookie = `gitaPdfPage=${page}; expires=${exp.toUTCString()}; path=/`;
+}
+
+function updatePdfResume() {
+  const saved = getCookiePdfPage();
+  const t = translations[currentLang];
+  const el = document.getElementById('gita-pdf-resume-lbl');
+  if (!el) return;
+  el.textContent = saved > 1 ? (t.pdfResumeText + saved) : t.pdfNoResume;
+}
+
+updatePdfResume();
+
+async function openGitaPdf() {
+  const overlay = document.getElementById('pdf-file-overlay');
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => { overlay.style.transform = 'translateY(0%)'; });
+
+  // Show loading
+  document.getElementById('pdf-file-loading').style.display = 'flex';
+  document.getElementById('pdf-canvas-scroll').style.display = 'none';
+  document.getElementById('pdf-fallback').style.display = 'none';
+
+  if (pdfLoading) return;
+
+  // If already loaded, just jump to saved page
+  if (pdfDoc) {
+    currentPdfPage = getCookiePdfPage();
+    showPdfPage(currentPdfPage);
+    return;
+  }
+
+  pdfLoading = true;
+  try {
+    // Wait for PDF.js to be ready
+    await waitForPdfJs();
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    const pdfSrc = window._gitaPdfBlobUrl || GITA_PDF_PATH;
+    pdfDoc = await window.pdfjsLib.getDocument(pdfSrc).promise;
+    totalPdfPages  = pdfDoc.numPages;
+    currentPdfPage = Math.min(getCookiePdfPage(), totalPdfPages);
+    pdfLoading = false;
+    showPdfPage(currentPdfPage);
+  } catch(err) {
+    pdfLoading = false;
+    console.warn('PDF load error:', err);
+    document.getElementById('pdf-file-loading').style.display = 'none';
+    document.getElementById('pdf-fallback').style.display = 'flex';
+  }
+}
+
+function waitForPdfJs() {
+  return new Promise((resolve, reject) => {
+    let tries = 0;
+    const check = () => {
+      if (window.pdfjsLib) { resolve(); return; }
+      if (++tries > 40) { reject(new Error('PDF.js not loaded')); return; }
+      setTimeout(check, 150);
+    };
+    check();
+  });
+}
+
+async function showPdfPage(pageNum) {
+  if (!pdfDoc) return;
+  pageNum = Math.max(1, Math.min(pageNum, totalPdfPages));
+  currentPdfPage = pageNum;
+  saveCookiePdfPage(pageNum);
+  updatePdfResume();
+
+  const t = translations[currentLang];
+  document.getElementById('pdf-file-pageinfo').textContent =
+    t.pdfPageInfo + pageNum + ' / ' + totalPdfPages;
+
+  // Update nav buttons
+  document.getElementById('pdf-prev-page-btn').disabled = pageNum <= 1;
+  document.getElementById('pdf-next-page-btn').disabled = pageNum >= totalPdfPages;
+
+  const scroll    = document.getElementById('pdf-canvas-scroll');
+  const zoomLayer = document.getElementById('pdf-zoom-layer');
+  zoomLayer.innerHTML = ''; // clear old page
+  resetPdfZoom(false);      // reset zoom/pan on page change without animation
+
+  try {
+    const page = await pdfDoc.getPage(pageNum);
+    const viewport = page.getViewport({ scale: PDF_SCALE });
+
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = `
+      position:relative; margin:0 auto;
+      border-radius: 4px 10px 10px 4px;
+      box-shadow: -3px 0 6px rgba(0,0,0,0.25), 3px 0 10px rgba(0,0,0,0.2), 0 6px 20px rgba(0,0,0,0.3);
+      overflow:hidden;
+      animation: pageAppear 0.4s ease;
+      max-width:100%;
+    `;
+    wrapper.style.width  = viewport.width  + 'px';
+    wrapper.style.height = viewport.height + 'px';
+
+    const canvas  = document.createElement('canvas');
+    canvas.width  = viewport.width;
+    canvas.height = viewport.height;
+    canvas.style.cssText = 'display:block; max-width:100%; height:auto;';
+
+    wrapper.appendChild(canvas);
+    zoomLayer.appendChild(wrapper);
+
+    // Make canvas fill available width
+    const containerWidth = scroll.clientWidth - 20;
+    const fitScale = containerWidth / viewport.width;
+    canvas.style.width  = (viewport.width  * fitScale) + 'px';
+    canvas.style.height = (viewport.height * fitScale) + 'px';
+    wrapper.style.width  = canvas.style.width;
+    wrapper.style.height = canvas.style.height;
+
+    const ctx2d = canvas.getContext('2d');
+    await page.render({ canvasContext: ctx2d, viewport }).promise;
+
+    // Hide loading, show canvas
+    document.getElementById('pdf-file-loading').style.display = 'none';
+    scroll.style.display = 'block';
+    initPdfZoom(); // attach pinch-zoom listeners (idempotent)
+
+  } catch(err) {
+    console.warn('Page render error:', err);
+    document.getElementById('pdf-fallback').style.display = 'flex';
+    document.getElementById('pdf-file-loading').style.display = 'none';
+  }
+}
+
+
+// ============================================================
+// PDF PINCH-ZOOM & PAN
+// ============================================================
+let pdfZoomScale  = 1;
+let pdfPanX       = 0;
+let pdfPanY       = 0;
+
+// Touch state
+let touches_      = [];
+let pinchStartDist = 0;
+let pinchStartScale = 1;
+let panStartX     = 0;
+let panStartY     = 0;
+let panStartPanX  = 0;
+let panStartPanY  = 0;
+let lastTapTime   = 0;
+
+const MIN_SCALE = 1;
+const MAX_SCALE = 5;
+
+let _zoomIndicatorTimer = null;
+function applyPdfTransform(animate) {
+  const layer = document.getElementById('pdf-zoom-layer');
+  if (!layer) return;
+  if (animate) layer.style.transition = 'transform 0.2s ease';
+  else         layer.style.transition = 'none';
+  layer.style.transform = `translate(${pdfPanX}px, ${pdfPanY}px) scale(${pdfZoomScale})`;
+
+  // Cursor
+  const scroll = document.getElementById('pdf-canvas-scroll');
+  if (scroll) scroll.style.cursor = pdfZoomScale > 1 ? 'grabbing' : 'grab';
+
+  // Zoom indicator
+  const ind = document.getElementById('pdf-zoom-ind');
+  if (ind) {
+    ind.textContent = Math.round(pdfZoomScale * 100) + '%';
+    ind.style.opacity = '1';
+    clearTimeout(_zoomIndicatorTimer);
+    _zoomIndicatorTimer = setTimeout(() => { ind.style.opacity = '0'; }, 1200);
+  }
+
+  // Reset button
+  const resetBtn = document.getElementById('pdf-zoom-reset-btn');
+  if (resetBtn) resetBtn.style.display = pdfZoomScale > 1.05 ? 'block' : 'none';
+}
+
+function clampPan() {
+  const scroll = document.getElementById('pdf-canvas-scroll');
+  const layer  = document.getElementById('pdf-zoom-layer');
+  if (!scroll || !layer) return;
+  const sw = scroll.clientWidth;
+  const sh = scroll.clientHeight;
+  const lw = layer.scrollWidth  * pdfZoomScale;
+  const lh = layer.scrollHeight * pdfZoomScale;
+  // Allow panning only as far as content edge
+  const maxPanX = 0;
+  const minPanX = Math.min(0, sw - lw);
+  const maxPanY = 0;
+  const minPanY = Math.min(0, sh - lh);
+  pdfPanX = Math.max(minPanX, Math.min(maxPanX, pdfPanX));
+  pdfPanY = Math.max(minPanY, Math.min(maxPanY, pdfPanY));
+}
+
+function resetPdfZoom(animate) {
+  pdfZoomScale = 1;
+  pdfPanX = 0;
+  pdfPanY = 0;
+  applyPdfTransform(animate);
+}
+
+function getDist(t1, t2) {
+  const dx = t1.clientX - t2.clientX;
+  const dy = t1.clientY - t2.clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+function getMidpoint(t1, t2) {
+  return {
+    x: (t1.clientX + t2.clientX) / 2,
+    y: (t1.clientY + t2.clientY) / 2,
+  };
+}
+
+function initPdfZoom() {
+  const scroll = document.getElementById('pdf-canvas-scroll');
+  if (!scroll || scroll._zoomInited) return;
+  scroll._zoomInited = true;
+
+  scroll.addEventListener('touchstart', e => {
+    touches_ = Array.from(e.touches);
+    if (touches_.length === 2) {
+      e.preventDefault();
+      pinchStartDist  = getDist(touches_[0], touches_[1]);
+      pinchStartScale = pdfZoomScale;
+    } else if (touches_.length === 1) {
+      // Double-tap detection
+      const now = Date.now();
+      if (now - lastTapTime < 280) {
+        e.preventDefault();
+        if (pdfZoomScale > 1.05) resetPdfZoom(true);
+        else {
+          // Zoom in 2.5x centred on tap
+          const rect = scroll.getBoundingClientRect();
+          const tx = touches_[0].clientX - rect.left;
+          const ty = touches_[0].clientY - rect.top;
+          pdfZoomScale = 2.5;
+          pdfPanX = (tx * (1 - pdfZoomScale));
+          pdfPanY = (ty * (1 - pdfZoomScale));
+          clampPan();
+          applyPdfTransform(true);
+        }
+        lastTapTime = 0;
+        return;
+      }
+      lastTapTime = now;
+      panStartX    = touches_[0].clientX;
+      panStartY    = touches_[0].clientY;
+      panStartPanX = pdfPanX;
+      panStartPanY = pdfPanY;
+    }
+  }, { passive: false });
+
+  scroll.addEventListener('touchmove', e => {
+    touches_ = Array.from(e.touches);
+    if (touches_.length === 2) {
+      e.preventDefault();
+      const newDist = getDist(touches_[0], touches_[1]);
+      const ratio   = newDist / pinchStartDist;
+      const newScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, pinchStartScale * ratio));
+
+      // Zoom centred on pinch midpoint
+      const rect = scroll.getBoundingClientRect();
+      const mid  = getMidpoint(touches_[0], touches_[1]);
+      const mx   = mid.x - rect.left;
+      const my   = mid.y - rect.top;
+
+      // Adjust pan so midpoint stays fixed
+      pdfPanX = mx - (mx - pdfPanX) * (newScale / pdfZoomScale);
+      pdfPanY = my - (my - pdfPanY) * (newScale / pdfZoomScale);
+      pdfZoomScale = newScale;
+      clampPan();
+      applyPdfTransform(false);
+
+    } else if (touches_.length === 1 && pdfZoomScale > 1.01) {
+      e.preventDefault();
+      const dx = touches_[0].clientX - panStartX;
+      const dy = touches_[0].clientY - panStartY;
+      pdfPanX = panStartPanX + dx;
+      pdfPanY = panStartPanY + dy;
+      clampPan();
+      applyPdfTransform(false);
+    }
+    // Single finger at scale=1: don't preventDefault — let native scroll work
+  }, { passive: false });
+
+  scroll.addEventListener('touchend', e => {
+    touches_ = Array.from(e.touches);
+    if (touches_.length === 1) {
+      // New reference point if one finger lifts during pan
+      panStartX    = touches_[0].clientX;
+      panStartY    = touches_[0].clientY;
+      panStartPanX = pdfPanX;
+      panStartPanY = pdfPanY;
+    }
+    // Snap back to min scale if over-released
+    if (pdfZoomScale < MIN_SCALE) {
+      resetPdfZoom(true);
+    }
+  }, { passive: true });
+}
+
+function closeGitaPdf() {
+  const overlay = document.getElementById('pdf-file-overlay');
+  overlay.style.transform = 'translateY(100%)';
+  resetPdfZoom(false); // reset zoom state when closing
+  updatePdfResume();
+  setTimeout(() => { overlay.style.display = 'none'; }, 650);
+}
+
+</script>
+</body>
+</html>

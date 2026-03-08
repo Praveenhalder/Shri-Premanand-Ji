@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Shri Premanand Ji</string>
+    <string name="title_activity_main">Shri Premanand Ji</string>
+    <string name="package_name">com.halder.shripremanandji</string>
+    <string name="custom_url_scheme">com.halder.shripremanandji</string>
+</resources>
